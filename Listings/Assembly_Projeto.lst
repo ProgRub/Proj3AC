@@ -1,0 +1,25 @@
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/15/2020 17:19:47 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\Assembly_Projeto.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Assembly_Projeto.a51 SET(SMALL) DEBUG PRINT(.\Listings\Assembly_Projeto
+                      .lst) OBJECT(.\Objects\Assembly_Projeto.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     end
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/15/2020 17:19:47 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
