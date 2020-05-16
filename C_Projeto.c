@@ -45,17 +45,17 @@ void iniciarTimers(void){
 }
 
 void iniciarSemaforos(void){
-	S1_Verde = 1;
-	S1_Amarelo = 0;
-	S1_Vermelho = 0;
-	S2_Verde = 1;
-	S2_Amarelo = 0;
-	S2_Vermelho = 0;
-	S3_Verde = 0;
-	S3_Amarelo = 0;
-	S3_Vermelho = 1;
-	P3_Verde = 1;
-	P3_Vermelho = 0;
+	S1_Verde = 0;
+	S1_Amarelo = 1;
+	S1_Vermelho = 1;
+	S2_Verde = 0;
+	S2_Amarelo = 1;
+	S2_Vermelho = 1;
+	S3_Verde = 1;
+	S3_Amarelo = 1;
+	S3_Vermelho = 0;
+	P3_Verde = 0;
+	P3_Vermelho = 1;
 }
 
 void Timer0_ISR(void) interrupt 1{
@@ -77,7 +77,7 @@ void Timer1_ISR(void) interrupt 3{
 }
 
 void External0_ISR(void) interrupt 0 {
-	if (S3_Verde == 1){
+	if (S3_Verde == 0){
 		contaTempoSemaforosCarros = 25;
 		contaTempoSemaforoPeoes = 25;
 		auxContaTempoSemaforoPeoes = 0;
@@ -100,10 +100,10 @@ void main(void){
 		}
 		
 		if(contaTempoSemaforosCarros == 10){
-			S1_Amarelo = 1;
-			S2_Amarelo = 1;
-			S1_Verde = 0;
-			S2_Verde = 0;
+			S1_Amarelo = 0;
+			S2_Amarelo = 0;
+			S1_Verde = 1;
+			S2_Verde = 1;
 		}
 		if(contaTempoSemaforoPeoes >= 10 &&contaTempoSemaforoPeoes <15){
 			if(contaTempoSemaforoPeoes % 2 ==0 && auxIntermitente==0){
@@ -116,20 +116,20 @@ void main(void){
 			}
 		}
 		if(contaTempoSemaforoPeoes == 15){
-			P3_Verde = 0;
-			P3_Vermelho = 1;
+			P3_Verde = 1;
+			P3_Vermelho = 0;
 		}
 		if(contaTempoSemaforosCarros == 15){
-			S3_Verde = 1;
-			S3_Vermelho = 0;
-			S1_Vermelho = 1;
-			S1_Amarelo = 0;
-			S2_Vermelho = 1;
-			S2_Amarelo = 0;
+			S3_Verde = 0;
+			S3_Vermelho = 1;
+			S1_Vermelho = 0;
+			S1_Amarelo = 1;
+			S2_Vermelho = 0;
+			S2_Amarelo = 1;
 		}
 		if(contaTempoSemaforosCarros == 25){
-			S3_Amarelo = 1;
-			S3_Verde = 0;
+			S3_Amarelo = 0;
+			S3_Verde = 1;
 		}
 		if(contaTempoSemaforosCarros == 30){
 			contaTempoSemaforosCarros = 0;
