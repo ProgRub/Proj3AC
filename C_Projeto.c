@@ -22,12 +22,14 @@ int contaTempoSemaforoPeoes = 0;
 int auxContaTempoSemaforosCarros = 0;
 int auxContaTempoSemaforoPeoes = 0;
 int auxIntermitente = 0;
+int botaoPeoes = 0;
 
 void iniciarTimers(void){
 	//Ativar as interrupções globais e dos timers 0 e 1
 	EA = 1;
 	ET0 = 1;
 	ET1 = 1;
+	EX0 = 1;
 	//Configurar os timers no modo 2 (8 bits autoreload)
 	TMOD &= 0x00;
 	TMOD |= 0x22;
@@ -39,6 +41,7 @@ void iniciarTimers(void){
 	//Iniciar timer 0 e 1
 	TR0 = 1;
 	TR1 = 1;
+	IT0 = 1;
 }
 
 void iniciarSemaforos(void){
@@ -72,6 +75,17 @@ void Timer1_ISR(void) interrupt 3{
 		auxContaTempoSemaforoPeoes++;
 	}
 }
+
+void External0_ISR(void) interrupt 0 {
+	if (S3_Verde == 1){
+		contaTempoSemaforosCarros = 25;
+		contaTempoSemaforoPeoes = 25;
+		auxContaTempoSemaforoPeoes = 0;
+		auxContaTempoSemaforosCarros = 0;
+	}
+	
+}
+
 
 void main(void){
 	iniciarTimers();

@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/16/2020  14:31:53  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/16/2020  15:02:02  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -24,12 +24,13 @@ LINK MAP OF MODULE:  .\Objects\Projeto3AC (C_PROJETO)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     000AH     UNIT         ?DT?C_PROJETO
-            IDATA   0012H     0001H     UNIT         ?STACK
+            DATA    0008H     000CH     UNIT         ?DT?C_PROJETO
+            IDATA   0014H     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-                    0003H     0008H                  *** GAP ***
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     0005H                  *** GAP ***
             CODE    000BH     0003H     ABSOLUTE     
                     000EH     000DH                  *** GAP ***
             CODE    001BH     0003H     ABSOLUTE     
@@ -39,9 +40,10 @@ LINK MAP OF MODULE:  .\Objects\Projeto3AC (C_PROJETO)
             CODE    0937H     008BH     UNIT         ?C?LIB_CODE
             CODE    09C2H     002BH     UNIT         ?PR?TIMER0_ISR?C_PROJETO
             CODE    09EDH     002BH     UNIT         ?PR?TIMER1_ISR?C_PROJETO
-            CODE    0A18H     001DH     UNIT         ?PR?INICIARTIMERS?C_PROJETO
-            CODE    0A35H     0017H     UNIT         ?PR?INICIARSEMAFOROS?C_PROJETO
-            CODE    0A4CH     0015H     UNIT         ?C_INITSEG
+            CODE    0A18H     0021H     UNIT         ?PR?INICIARTIMERS?C_PROJETO
+            CODE    0A39H     001CH     UNIT         ?PR?EXTERNAL0_ISR?C_PROJETO
+            CODE    0A55H     0019H     UNIT         ?C_INITSEG
+            CODE    0A6EH     0017H     UNIT         ?PR?INICIARSEMAFOROS?C_PROJETO
 
 
 
@@ -57,10 +59,10 @@ SEGMENT
 
 ?PR?MAIN?C_PROJETO
   +--> ?PR?INICIARTIMERS?C_PROJETO
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  15:02:02  PAGE 2
+
+
   +--> ?PR?INICIARSEMAFOROS?C_PROJETO
-
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  14:31:53  PAGE 2
-
 
 
 
@@ -78,7 +80,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (C_PROJETO)
   C:09EDH         PUBLIC        Timer1_ISR
   B:00A8H.7       PUBLIC        EA
   D:0008H         PUBLIC        auxContaTempoSemaforoPeoes
-  C:0A35H         PUBLIC        iniciarSemaforos
+  D:000AH         PUBLIC        botaoPeoes
+  C:0A6EH         PUBLIC        iniciarSemaforos
   C:0800H         PUBLIC        main
   B:0090H.1       PUBLIC        S1_Amarelo
   B:00A0H.4       PUBLIC        P3_Vermelho
@@ -88,13 +91,16 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (C_PROJETO)
   B:0090H.3       PUBLIC        S2_Vermelho
   B:00A0H.2       PUBLIC        S3_Vermelho
   D:0089H         PUBLIC        TMOD
-  D:000AH         PUBLIC        contaTempoSemaforosCarros
+  D:000CH         PUBLIC        contaTempoSemaforosCarros
+  C:0A39H         PUBLIC        External0_ISR
   B:00A8H.1       PUBLIC        ET0
   B:00A8H.3       PUBLIC        ET1
   D:008CH         PUBLIC        TH0
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
   D:008DH         PUBLIC        TH1
   D:008AH         PUBLIC        TL0
-  D:000CH         PUBLIC        auxIntermitente
+  D:000EH         PUBLIC        auxIntermitente
   D:008BH         PUBLIC        TL1
   B:0088H.4       PUBLIC        TR0
   B:0088H.6       PUBLIC        TR1
@@ -103,108 +109,120 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (C_PROJETO)
   B:0090H.2       PUBLIC        S1_Verde
   B:0090H.5       PUBLIC        S2_Verde
   B:00A0H.0       PUBLIC        S3_Verde
-  D:000EH         PUBLIC        contaTempoSemaforoPeoes
-  D:0010H         PUBLIC        auxContaTempoSemaforosCarros
+  D:0010H         PUBLIC        contaTempoSemaforoPeoes
+  D:0012H         PUBLIC        auxContaTempoSemaforosCarros
   -------         PROC          INICIARTIMERS
-  C:0A18H         LINE#         26
-  C:0A18H         LINE#         28
-  C:0A1AH         LINE#         29
-  C:0A1CH         LINE#         30
+  C:0A18H         LINE#         27
+  C:0A18H         LINE#         29
+  C:0A1AH         LINE#         30
+  C:0A1CH         LINE#         31
   C:0A1EH         LINE#         32
-  C:0A21H         LINE#         33
-  C:0A24H         LINE#         35
-  C:0A27H         LINE#         36
-  C:0A2AH         LINE#         37
-  C:0A2DH         LINE#         38
-  C:0A30H         LINE#         40
-  C:0A32H         LINE#         41
-  C:0A34H         LINE#         42
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  14:31:53  PAGE 3
+  C:0A20H         LINE#         34
+  C:0A23H         LINE#         35
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  15:02:02  PAGE 3
 
 
+  C:0A26H         LINE#         37
+  C:0A29H         LINE#         38
+  C:0A2CH         LINE#         39
+  C:0A2FH         LINE#         40
+  C:0A32H         LINE#         42
+  C:0A34H         LINE#         43
+  C:0A36H         LINE#         44
+  C:0A38H         LINE#         45
   -------         ENDPROC       INICIARTIMERS
   -------         PROC          INICIARSEMAFOROS
-  C:0A35H         LINE#         44
-  C:0A35H         LINE#         45
-  C:0A37H         LINE#         46
-  C:0A39H         LINE#         47
-  C:0A3BH         LINE#         48
-  C:0A3DH         LINE#         49
-  C:0A3FH         LINE#         50
-  C:0A41H         LINE#         51
-  C:0A43H         LINE#         52
-  C:0A45H         LINE#         53
-  C:0A47H         LINE#         54
-  C:0A49H         LINE#         55
-  C:0A4BH         LINE#         56
+  C:0A6EH         LINE#         47
+  C:0A6EH         LINE#         48
+  C:0A70H         LINE#         49
+  C:0A72H         LINE#         50
+  C:0A74H         LINE#         51
+  C:0A76H         LINE#         52
+  C:0A78H         LINE#         53
+  C:0A7AH         LINE#         54
+  C:0A7CH         LINE#         55
+  C:0A7EH         LINE#         56
+  C:0A80H         LINE#         57
+  C:0A82H         LINE#         58
+  C:0A84H         LINE#         59
   -------         ENDPROC       INICIARSEMAFOROS
   -------         PROC          TIMER0_ISR
-  C:09C2H         LINE#         58
-  C:09C6H         LINE#         59
-  C:09D0H         LINE#         60
-  C:09D8H         LINE#         61
-  C:09DEH         LINE#         62
-  C:09E0H         LINE#         63
-  C:09E8H         LINE#         64
-  C:09E8H         LINE#         65
+  C:09C2H         LINE#         61
+  C:09C6H         LINE#         62
+  C:09D0H         LINE#         63
+  C:09D8H         LINE#         64
+  C:09DEH         LINE#         65
+  C:09E0H         LINE#         66
+  C:09E8H         LINE#         67
+  C:09E8H         LINE#         68
   -------         ENDPROC       TIMER0_ISR
   -------         PROC          TIMER1_ISR
-  C:09EDH         LINE#         67
-  C:09F1H         LINE#         68
-  C:09FBH         LINE#         69
-  C:0A03H         LINE#         70
-  C:0A09H         LINE#         71
-  C:0A0BH         LINE#         72
-  C:0A13H         LINE#         73
-  C:0A13H         LINE#         74
+  C:09EDH         LINE#         70
+  C:09F1H         LINE#         71
+  C:09FBH         LINE#         72
+  C:0A03H         LINE#         73
+  C:0A09H         LINE#         74
+  C:0A0BH         LINE#         75
+  C:0A13H         LINE#         76
+  C:0A13H         LINE#         77
   -------         ENDPROC       TIMER1_ISR
+  -------         PROC          EXTERNAL0_ISR
+  C:0A39H         LINE#         79
+  C:0A39H         LINE#         80
+  C:0A3CH         LINE#         81
+  C:0A42H         LINE#         82
+  C:0A48H         LINE#         83
+  C:0A4EH         LINE#         84
+  C:0A54H         LINE#         85
+  C:0A54H         LINE#         87
+  -------         ENDPROC       EXTERNAL0_ISR
   -------         PROC          MAIN
-  C:0800H         LINE#         76
-  C:0800H         LINE#         77
-  C:0803H         LINE#         78
-  C:0803H         LINE#         84
-  C:080FH         LINE#         85
-  C:0812H         LINE#         86
-  C:0812H         LINE#         88
-  C:081AH         LINE#         89
-  C:081CH         LINE#         90
-  C:081EH         LINE#         91
-  C:0820H         LINE#         92
-  C:0822H         LINE#         93
-  C:0822H         LINE#         94
-  C:083BH         LINE#         95
-  C:0850H         LINE#         96
-  C:0855H         LINE#         97
-  C:0857H         LINE#         98
-  C:0857H         LINE#         99
-  C:0863H         LINE#         100
-  C:0867H         LINE#         101
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  14:31:53  PAGE 4
+  C:0800H         LINE#         90
+  C:0800H         LINE#         91
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  15:02:02  PAGE 4
 
 
-  C:0869H         LINE#         102
-  C:0869H         LINE#         103
-  C:0869H         LINE#         104
-  C:0871H         LINE#         105
-  C:0873H         LINE#         106
-  C:0875H         LINE#         107
-  C:0875H         LINE#         108
-  C:087DH         LINE#         109
-  C:087FH         LINE#         110
-  C:0881H         LINE#         111
-  C:0883H         LINE#         112
-  C:0885H         LINE#         113
-  C:0887H         LINE#         114
-  C:0889H         LINE#         115
-  C:0889H         LINE#         116
-  C:0891H         LINE#         117
-  C:0893H         LINE#         118
-  C:0895H         LINE#         119
-  C:0895H         LINE#         120
-  C:08A0H         LINE#         121
-  C:08A4H         LINE#         122
-  C:08A8H         LINE#         123
-  C:08A8H         LINE#         124
+  C:0803H         LINE#         92
+  C:0803H         LINE#         98
+  C:080FH         LINE#         99
+  C:0812H         LINE#         100
+  C:0812H         LINE#         102
+  C:081AH         LINE#         103
+  C:081CH         LINE#         104
+  C:081EH         LINE#         105
+  C:0820H         LINE#         106
+  C:0822H         LINE#         107
+  C:0822H         LINE#         108
+  C:083BH         LINE#         109
+  C:0850H         LINE#         110
+  C:0855H         LINE#         111
+  C:0857H         LINE#         112
+  C:0857H         LINE#         113
+  C:0863H         LINE#         114
+  C:0867H         LINE#         115
+  C:0869H         LINE#         116
+  C:0869H         LINE#         117
+  C:0869H         LINE#         118
+  C:0871H         LINE#         119
+  C:0873H         LINE#         120
+  C:0875H         LINE#         121
+  C:0875H         LINE#         122
+  C:087DH         LINE#         123
+  C:087FH         LINE#         124
+  C:0881H         LINE#         125
+  C:0883H         LINE#         126
+  C:0885H         LINE#         127
+  C:0887H         LINE#         128
+  C:0889H         LINE#         129
+  C:0889H         LINE#         130
+  C:0891H         LINE#         131
+  C:0893H         LINE#         132
+  C:0895H         LINE#         133
+  C:0895H         LINE#         134
+  C:08A0H         LINE#         135
+  C:08A4H         LINE#         136
+  C:08A8H         LINE#         137
+  C:08A8H         LINE#         138
   -------         ENDPROC       MAIN
   -------         ENDMOD        C_PROJETO
 
@@ -217,8 +235,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (C_PROJETO)
   -------         ENDMOD        ?C?UIDIV
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 014FH BYTE (16%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0176H BYTE (18%) *
 ******************************************************************************
 
-Program Size: data=19.0 xdata=0 code=618
+Program Size: data=21.0 xdata=0 code=657
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/16/2020  15:02:02  PAGE 5
+
+
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
