@@ -21,6 +21,7 @@ int contaTempoSemaforosCarros = 0;
 int contaTempoSemaforoPeoes = 0;
 int auxContaTempoSemaforosCarros = 0;
 int auxContaTempoSemaforoPeoes = 0;
+int auxIntermitente = 0;
 
 void iniciarTimers(void){
 	//Ativar as interrupções globais e dos timers 0 e 1
@@ -90,8 +91,13 @@ void main(void){
 			S1_Verde = 0;
 			S2_Verde = 0;
 		}
-		if(contaTempoSemaforoPeoes >= 10){
-			if(contaTempoSemaforoPeoes%2 == 1){
+		if(contaTempoSemaforoPeoes >= 10 &&contaTempoSemaforoPeoes <15){
+			if(contaTempoSemaforoPeoes % 2 ==0 && auxIntermitente==0){
+				auxIntermitente=1;
+				P3_Verde = ~P3_Verde;
+			}
+			if(contaTempoSemaforoPeoes % 2 !=0&& auxIntermitente==1){
+				auxIntermitente=0;
 				P3_Verde = ~P3_Verde;
 			}
 		}
@@ -117,6 +123,3 @@ void main(void){
 		}
 	}
 }
-
-
-	
