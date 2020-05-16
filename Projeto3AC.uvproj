@@ -377,9 +377,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>C_Projeto.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\C_Projeto.c</FilePath>
+              <FileName>Assembly_Projeto.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Assembly_Projeto.a51</FilePath>
             </File>
           </Files>
         </Group>

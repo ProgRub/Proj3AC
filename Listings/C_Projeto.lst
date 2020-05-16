@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 15:15:08 PAGE 1   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 16:53:45 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE C_PROJETO
 OBJECT MODULE PLACED IN .\Objects\C_Projeto.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE C_Projeto.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
-                    -\C_Projeto.lst) OBJECT(.\Objects\C_Projeto.obj)
+                    -\C_Projeto.lst) TABS(2) OBJECT(.\Objects\C_Projeto.obj)
 
 line level    source
 
@@ -28,137 +28,120 @@ line level    source
   18          sbit B3= P3^2; //porta de entrada para pressionar o botão B3
   19          
   20          int contaTempoSemaforosCarros = 0;
-  21          int contaTempoSemaforoPeoes = 0;
-  22          int auxContaTempoSemaforosCarros = 0;
-  23          int auxContaTempoSemaforoPeoes = 0;
-  24          int auxIntermitente = 0;
-  25          int botaoPeoes = 0;
-  26          
-  27          void iniciarTimers(void){
-  28   1              //Ativar as interrupções globais e dos timers 0 e 1
-  29   1              EA = 1;
-  30   1              ET0 = 1;
-  31   1              ET1 = 1;
-  32   1              EX0 = 1;
-  33   1              //Configurar os timers no modo 2 (8 bits autoreload)
-  34   1              TMOD &= 0x00;
-  35   1              TMOD |= 0x22;
-  36   1              //Configurar o tempo de contagem 250 microsegundos
-  37   1              TH0 = 0x06;
-  38   1              TL0 = 0x06;
-  39   1              TH1 = 0x06;
-  40   1              TL1 = 0x06;
-  41   1              //Iniciar timer 0 e 1
-  42   1              TR0 = 1;
-  43   1              TR1 = 1;
-  44   1              IT0 = 1;
-  45   1      }
-  46          
-  47          void iniciarSemaforos(void){
-  48   1              S1_Verde = 0;
-  49   1              S1_Amarelo = 1;
-  50   1              S1_Vermelho = 1;
-  51   1              S2_Verde = 0;
-  52   1              S2_Amarelo = 1;
-  53   1              S2_Vermelho = 1;
-  54   1              S3_Verde = 1;
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 15:15:08 PAGE 2   
+  21          int auxContaTempoSemaforosCarros = 0;
+  22          int auxIntermitente = 0;
+  23          
+  24          void iniciarTimers(void){
+  25   1        //Ativar as interrupções globais e dos timers 0 e 1
+  26   1        EA = 1;
+  27   1        ET0 = 1;
+  28   1        EX0 = 1;
+  29   1        //Configurar os timers no modo 2 (8 bits autoreload)
+  30   1        TMOD &= 0xF0;
+  31   1        TMOD |= 0x02;
+  32   1        //Configurar o tempo de contagem 250 microsegundos
+  33   1        TH0 = 0x06;
+  34   1        TL0 = 0x06;
+  35   1        //Iniciar timer 0 e 1
+  36   1        TR0 = 1;
+  37   1        IT0 = 1;
+  38   1      }
+  39          
+  40          void iniciarSemaforos(void){
+  41   1        S1_Verde = 0;
+  42   1        S1_Amarelo = 1;
+  43   1        S1_Vermelho = 1;
+  44   1        S2_Verde = 0;
+  45   1        S2_Amarelo = 1;
+  46   1        S2_Vermelho = 1;
+  47   1        S3_Verde = 1;
+  48   1        S3_Amarelo = 1;
+  49   1        S3_Vermelho = 0;
+  50   1        P3_Verde = 0;
+  51   1        P3_Vermelho = 1;
+  52   1      }
+  53          
+  54          void Timer0_ISR(void) interrupt 1{
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 16:53:45 PAGE 2   
 
-  55   1              S3_Amarelo = 1;
-  56   1              S3_Vermelho = 0;
-  57   1              P3_Verde = 0;
-  58   1              P3_Vermelho = 1;
-  59   1      }
-  60          
-  61          void Timer0_ISR(void) interrupt 1{
-  62   1              if(auxContaTempoSemaforosCarros == 4000){
-  63   2                      contaTempoSemaforosCarros++;
-  64   2                      auxContaTempoSemaforosCarros = 0;
-  65   2              }else{
-  66   2                      auxContaTempoSemaforosCarros++;
-  67   2              }
-  68   1      }
-  69          
-  70          void Timer1_ISR(void) interrupt 3{
-  71   1              if(auxContaTempoSemaforoPeoes == 4000){
-  72   2                      contaTempoSemaforoPeoes++;
-  73   2                      auxContaTempoSemaforoPeoes = 0;
-  74   2              }else{
-  75   2                      auxContaTempoSemaforoPeoes++;
-  76   2              }
-  77   1      }
-  78          
-  79          void External0_ISR(void) interrupt 0 {
-  80   1              if (S3_Verde == 1){
-  81   2                      contaTempoSemaforosCarros = 25;
-  82   2                      contaTempoSemaforoPeoes = 25;
-  83   2                      auxContaTempoSemaforoPeoes = 0;
-  84   2                      auxContaTempoSemaforosCarros = 0;
-  85   2              }
-  86   1              
-  87   1      }
-  88          
-  89          
-  90          void main(void){
-  91   1              iniciarTimers();
-  92   1              for(;;){
-  93   2                      //Contas = 1 -> 250 microsegundos
-  94   2                      //Contas = 4 -> 1 milisegundo
-  95   2                      //Contas = 20000 -> 5 segundos
-  96   2                      //Contas = 40000 -> 10 segundos
-  97   2                      //Contas = 60000 -> 15 segundos
-  98   2                      if(contaTempoSemaforoPeoes == 0 && contaTempoSemaforosCarros == 0){
-  99   3                              iniciarSemaforos();
- 100   3                      }
- 101   2                      
- 102   2                      if(contaTempoSemaforosCarros == 10){
- 103   3                              S1_Amarelo = 0;
- 104   3                              S2_Amarelo = 0;
- 105   3                              S1_Verde = 1;
- 106   3                              S2_Verde = 1;
- 107   3                      }
- 108   2                      if(contaTempoSemaforoPeoes >= 10 &&contaTempoSemaforoPeoes <15){
- 109   3                              if(contaTempoSemaforoPeoes % 2 ==0 && auxIntermitente==0){
- 110   4                                      auxIntermitente=1;
- 111   4                                      P3_Verde = ~P3_Verde;
- 112   4                              }
- 113   3                              if(contaTempoSemaforoPeoes % 2 !=0&& auxIntermitente==1){
- 114   4                                      auxIntermitente=0;
- 115   4                                      P3_Verde = ~P3_Verde;
- 116   4                              }
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 15:15:08 PAGE 3   
+  55   1        if(auxContaTempoSemaforosCarros == 4000){
+  56   2          contaTempoSemaforosCarros++;
+  57   2          auxContaTempoSemaforosCarros = 0;
+  58   2        }else{
+  59   2          auxContaTempoSemaforosCarros++;
+  60   2        }
+  61   1      }
+  62          
+  63          
+  64          void External0_ISR(void) interrupt 0 {
+  65   1        if (S3_Verde == 0){
+  66   2          contaTempoSemaforosCarros = 25;
+  67   2          auxContaTempoSemaforosCarros = 0;
+  68   2        }
+  69   1        
+  70   1      }
+  71          
+  72          
+  73          void main(void){
+  74   1        iniciarTimers();
+  75   1        for(;;){
+  76   2          //Contas = 1 -> 250 microsegundos
+  77   2          //Contas = 4 -> 1 milisegundo
+  78   2          //Contas = 20000 -> 5 segundos
+  79   2          //Contas = 40000 -> 10 segundos
+  80   2          //Contas = 60000 -> 15 segundos
+  81   2          if(contaTempoSemaforosCarros == 0){
+  82   3            iniciarSemaforos();
+  83   3          }
+  84   2          
+  85   2          if(contaTempoSemaforosCarros == 10){
+  86   3            S1_Amarelo = 0;
+  87   3            S2_Amarelo = 0;
+  88   3            S1_Verde = 1;
+  89   3            S2_Verde = 1;
+  90   3          }
+  91   2          if(contaTempoSemaforosCarros >= 10 &&contaTempoSemaforosCarros <15){
+  92   3            if(contaTempoSemaforosCarros % 2 ==0 && auxIntermitente==0){
+  93   4              auxIntermitente=1;
+  94   4              P3_Verde = ~P3_Verde;
+  95   4            }
+  96   3            if(contaTempoSemaforosCarros % 2 !=0&& auxIntermitente==1){
+  97   4              auxIntermitente=0;
+  98   4              P3_Verde = ~P3_Verde;
+  99   4            }
+ 100   3          }
+ 101   2          
+ 102   2          if(contaTempoSemaforosCarros == 15){
+ 103   3            S3_Verde = 0;
+ 104   3            S3_Vermelho = 1;
+ 105   3            S1_Vermelho = 0;
+ 106   3            S1_Amarelo = 1;
+ 107   3            S2_Vermelho = 0;
+ 108   3            S2_Amarelo = 1;
+ 109   3            P3_Verde = 1;
+ 110   3            P3_Vermelho = 0;
+ 111   3          }
+ 112   2          
+ 113   2          if(contaTempoSemaforosCarros == 25){
+ 114   3            S3_Amarelo = 0;
+ 115   3            S3_Verde = 1;
+ 116   3          }
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 16:53:45 PAGE 3   
 
- 117   3                      }
- 118   2                      if(contaTempoSemaforoPeoes == 15){
- 119   3                              P3_Verde = 1;
- 120   3                              P3_Vermelho = 0;
- 121   3                      }
- 122   2                      if(contaTempoSemaforosCarros == 15){
- 123   3                              S3_Verde = 0;
- 124   3                              S3_Vermelho = 1;
- 125   3                              S1_Vermelho = 0;
- 126   3                              S1_Amarelo = 1;
- 127   3                              S2_Vermelho = 0;
- 128   3                              S2_Amarelo = 1;
- 129   3                      }
- 130   2                      if(contaTempoSemaforosCarros == 25){
- 131   3                              S3_Amarelo = 0;
- 132   3                              S3_Verde = 1;
- 133   3                      }
- 134   2                      if(contaTempoSemaforosCarros == 30){
- 135   3                              contaTempoSemaforosCarros = 0;
- 136   3                              contaTempoSemaforoPeoes = 0;
- 137   3                      }
- 138   2              }
- 139   1      }
+ 117   2          
+ 118   2          if(contaTempoSemaforosCarros == 30){
+ 119   3            contaTempoSemaforosCarros = 0;
+ 120   3          }
+ 121   2        }
+ 122   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    341    ----
+   CODE SIZE        =    258    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     12    ----
+   DATA SIZE        =      6    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
