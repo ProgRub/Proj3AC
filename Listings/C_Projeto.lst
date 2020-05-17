@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 16:53:45 PAGE 1   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 12:04:59 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE C_PROJETO
 OBJECT MODULE PLACED IN .\Objects\C_Projeto.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE C_Projeto.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
-                    -\C_Projeto.lst) TABS(2) OBJECT(.\Objects\C_Projeto.obj)
+                    -\C_Projeto.lst) OBJECT(.\Objects\C_Projeto.obj)
 
 line level    source
 
@@ -27,117 +27,129 @@ line level    source
   17          
   18          sbit B3= P3^2; //porta de entrada para pressionar o botão B3
   19          
-  20          int contaTempoSemaforosCarros = 0;
-  21          int auxContaTempoSemaforosCarros = 0;
-  22          int auxIntermitente = 0;
+  20          int contaSegundos = 0; //esta variável é igual ao número de segundos que passou deste o início do cicl
+             -o
+  21          int auxContaSegundos = 0; //esta variável conta o número de vezes que ocorre overflow no timer (que ocor
+             -re quando passam 250 microsegundos
+  22          int auxMudarSemaforos = 1; //variável "booleana" para evitar estar sempre a definir os semáforos
   23          
-  24          void iniciarTimers(void){
-  25   1        //Ativar as interrupções globais e dos timers 0 e 1
-  26   1        EA = 1;
-  27   1        ET0 = 1;
-  28   1        EX0 = 1;
-  29   1        //Configurar os timers no modo 2 (8 bits autoreload)
-  30   1        TMOD &= 0xF0;
-  31   1        TMOD |= 0x02;
-  32   1        //Configurar o tempo de contagem 250 microsegundos
-  33   1        TH0 = 0x06;
-  34   1        TL0 = 0x06;
-  35   1        //Iniciar timer 0 e 1
-  36   1        TR0 = 1;
-  37   1        IT0 = 1;
-  38   1      }
-  39          
-  40          void iniciarSemaforos(void){
-  41   1        S1_Verde = 0;
-  42   1        S1_Amarelo = 1;
-  43   1        S1_Vermelho = 1;
-  44   1        S2_Verde = 0;
-  45   1        S2_Amarelo = 1;
-  46   1        S2_Vermelho = 1;
-  47   1        S3_Verde = 1;
-  48   1        S3_Amarelo = 1;
-  49   1        S3_Vermelho = 0;
-  50   1        P3_Verde = 0;
-  51   1        P3_Vermelho = 1;
-  52   1      }
-  53          
-  54          void Timer0_ISR(void) interrupt 1{
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 16:53:45 PAGE 2   
+  24          //*****************IMPORTANTE************************
+  25          //0 - LED ligado
+  26          //1 - LED desligado
+  27          
+  28          void Inicializar(void){
+  29   1              //Ativar as interrupções globais, do timer 0 e da interrupção externa 0
+  30   1              EA = 1;
+  31   1              ET0 = 1;
+  32   1              EX0 = 1;
+  33   1              //Configurar o timer no modo 2 (8 bits autoreload)
+  34   1              TMOD &= 0xF0;
+  35   1              TMOD |= 0x02;
+  36   1              //Configurar o tempo de contagem para 250 microsegundos
+  37   1              TH0 = 0x06;
+  38   1              TL0 = 0x06;
+  39   1              //Iniciar timer 0 e definir a interrupção para ser acionada na falling edge
+  40   1              TR0 = 1;
+  41   1              IT0 = 1; 
+  42   1      }
+  43          void Timer0_ISR(void) interrupt 1{
+  44   1                      //auxContaSegundos = 1 -> 250 microsegundos
+  45   1                      //auxContaSegundos = 4 -> 1 milisegundo
+  46   1                      //auxContaSegundos = 4000 -> 1 segundo
+  47   1              if(auxContaSegundos == 4000){ //quando esta variável chegar a 4000, significa que fez-se um segundo
+  48   2                      contaSegundos++;
+  49   2                      auxContaSegundos = 0; //reset da variável
+  50   2                      auxMudarSemaforos = 1; //como o contaSegundos aumentou, definimos isto a 1 para efetuar as verificaçõe
+             -s
+  51   2              }else{ //se não chegou, incrementa-se a variável
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 12:04:59 PAGE 2   
 
-  55   1        if(auxContaTempoSemaforosCarros == 4000){
-  56   2          contaTempoSemaforosCarros++;
-  57   2          auxContaTempoSemaforosCarros = 0;
-  58   2        }else{
-  59   2          auxContaTempoSemaforosCarros++;
-  60   2        }
-  61   1      }
-  62          
-  63          
-  64          void External0_ISR(void) interrupt 0 {
-  65   1        if (S3_Verde == 0){
-  66   2          contaTempoSemaforosCarros = 25;
-  67   2          auxContaTempoSemaforosCarros = 0;
-  68   2        }
-  69   1        
-  70   1      }
-  71          
-  72          
-  73          void main(void){
-  74   1        iniciarTimers();
-  75   1        for(;;){
-  76   2          //Contas = 1 -> 250 microsegundos
-  77   2          //Contas = 4 -> 1 milisegundo
-  78   2          //Contas = 20000 -> 5 segundos
-  79   2          //Contas = 40000 -> 10 segundos
-  80   2          //Contas = 60000 -> 15 segundos
-  81   2          if(contaTempoSemaforosCarros == 0){
-  82   3            iniciarSemaforos();
-  83   3          }
-  84   2          
-  85   2          if(contaTempoSemaforosCarros == 10){
-  86   3            S1_Amarelo = 0;
-  87   3            S2_Amarelo = 0;
-  88   3            S1_Verde = 1;
-  89   3            S2_Verde = 1;
-  90   3          }
-  91   2          if(contaTempoSemaforosCarros >= 10 &&contaTempoSemaforosCarros <15){
-  92   3            if(contaTempoSemaforosCarros % 2 ==0 && auxIntermitente==0){
-  93   4              auxIntermitente=1;
-  94   4              P3_Verde = ~P3_Verde;
-  95   4            }
-  96   3            if(contaTempoSemaforosCarros % 2 !=0&& auxIntermitente==1){
-  97   4              auxIntermitente=0;
-  98   4              P3_Verde = ~P3_Verde;
-  99   4            }
- 100   3          }
- 101   2          
- 102   2          if(contaTempoSemaforosCarros == 15){
- 103   3            S3_Verde = 0;
- 104   3            S3_Vermelho = 1;
- 105   3            S1_Vermelho = 0;
- 106   3            S1_Amarelo = 1;
- 107   3            S2_Vermelho = 0;
- 108   3            S2_Amarelo = 1;
- 109   3            P3_Verde = 1;
- 110   3            P3_Vermelho = 0;
- 111   3          }
- 112   2          
- 113   2          if(contaTempoSemaforosCarros == 25){
- 114   3            S3_Amarelo = 0;
- 115   3            S3_Verde = 1;
- 116   3          }
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/16/2020 16:53:45 PAGE 3   
+  52   2                      auxContaSegundos++;
+  53   2              }
+  54   1      }
+  55          
+  56          
+  57          void External0_ISR(void) interrupt 0 {
+  58   1              if (S3_Verde == 0){ //verifica-se se o sinal verde do semáforo S3 está ligado
+  59   2                      contaSegundos = 25; //se estiver define-se o contasegundos a 25 pois é neste momento que se põe o sem�
+             -�foro 3 a amarelo como pretendido
+  60   2                      auxContaSegundos = 0; //reset da variável que conta os overflows do timer, de modo a passar 5 segundos 
+             -a partir do botão ser clicado
+  61   2                      auxMudarSemaforos = 1; //como o contaSegundos mudou, definimos isto a 1 para efetuar as verificações
+  62   2              }
+  63   1              
+  64   1      }
+  65          
+  66          
+  67          void main(void){
+  68   1              Inicializar();
+  69   1              for(;;){
+  70   2                      if (auxMudarSemaforos==1){
+  71   3                              if(contaSegundos == 0){ //parte inicial do ciclo, S1 e S2 verdes, S3 vermelho, P3 verde
+  72   4                                      S1_Verde = 0;
+  73   4                                      S1_Amarelo = 1;
+  74   4                                      S1_Vermelho = 1;
+  75   4                                      S2_Verde = 0;
+  76   4                                      S2_Amarelo = 1;
+  77   4                                      S2_Vermelho = 1;
+  78   4                                      S3_Verde = 1;
+  79   4                                      S3_Amarelo = 1;
+  80   4                                      S3_Vermelho = 0;
+  81   4                                      P3_Verde = 0;
+  82   4                                      P3_Vermelho = 1;
+  83   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -entar
+  84   4                              }
+  85   3                              
+  86   3                              if(contaSegundos == 10){ //depois de 10 segundos, S1 e S2 fiam amarelos
+  87   4                                      S1_Amarelo = 0;
+  88   4                                      S2_Amarelo = 0;
+  89   4                                      S1_Verde = 1;
+  90   4                                      S2_Verde = 1;
+  91   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -entar
+  92   4                              }
+  93   3                              if(contaSegundos >= 10 &&contaSegundos <15){ //entre os 10 e 15 segundos, o semáforo P3 deve ficar ver
+             -de intermitente, a cada segundo
+  94   4                                      P3_Verde = ~P3_Verde;
+  95   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -entar
+  96   4                              }
+  97   3                              
+  98   3                              if(contaSegundos == 15){ //depois de 15 segundos, S1 e S2 ficam vermelhos, S3 fica verde e P3 fica verm
+             -elho
+  99   4                                      S3_Verde = 0;
+ 100   4                                      S3_Vermelho = 1;
+ 101   4                                      S1_Vermelho = 0;
+ 102   4                                      S1_Amarelo = 1;
+ 103   4                                      S2_Vermelho = 0;
+ 104   4                                      S2_Amarelo = 1;
+ 105   4                                      P3_Verde = 1;
+ 106   4                                      P3_Vermelho = 0;
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 12:04:59 PAGE 3   
 
- 117   2          
- 118   2          if(contaTempoSemaforosCarros == 30){
- 119   3            contaTempoSemaforosCarros = 0;
- 120   3          }
- 121   2        }
- 122   1      }
+ 107   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -entar
+ 108   4                              }
+ 109   3                              
+ 110   3                              if(contaSegundos == 25){ //depois de 25 segundos, S3 fica amarelo
+ 111   4                                      S3_Amarelo = 0;
+ 112   4                                      S3_Verde = 1;
+ 113   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -entar
+ 114   4                              }
+ 115   3                              
+ 116   3                              if(contaSegundos == 30){ //depois dos 30 segundos, faz-se reset da variável para voltarmos ao início 
+             -do ciclo e tratar dos semáforos
+ 117   4                                      contaSegundos = 0; 
+ 118   4                              }
+ 119   3                      }
+ 120   2              }
+ 121   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    258    ----
+   CODE SIZE        =    251    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
