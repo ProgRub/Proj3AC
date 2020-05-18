@@ -1,26 +1,33 @@
 ;constantes
 TempoL EQU 0x06
 TempoH EQU 0x06
-
-S1_Vermelho EQU P1.0
-S1_Amarelo EQU P1.1
-S1_Verde EQU P1.2
-
-S2_Vermelho EQU P1.3
-S2_Amarelo EQU P1.4
-S2_Verde EQU P1.5
 	
-S3_Vermelho EQU P2.2
-S3_Amarelo EQU P2.1
+;S1_Vermelho EQU P1.0
+;S1_Amarelo EQU P1.1
+;S1_Verde EQU P1.2
+
+;S2_Vermelho EQU P1.3
+;S2_Amarelo EQU P1.4
+;S2_Verde EQU P1.5
+	
+;S3_Vermelho EQU P2.2
+;S3_Amarelo EQU P2.1
 S3_Verde EQU P2.0
 
-P3_Vermelho EQU P2.4
+;P3_Vermelho EQU P2.4
 P3_Verde EQU P2.3
 
 B3 EQU P3.2
 
 S1_S2 EQU P1
 S3_P3 EQU P2	
+	
+S1_S2_Verdes EQU 00011011b 
+S3_Vermelho_P3_Verde EQU 00010011b 
+S1_S2_Amarelos EQU 00101101b 
+S1_S2_Vermelhos EQU 00110110b 
+S3_Verde_P3_Vermelho EQU 00001110b
+S3_Amarelo_P3_Vermelho EQU 00001101b
 
 Zero EQU 0 ;para os semáforos indica que o semáforo está ligado
 Um EQU 1 ;para os semáforos indica que o semáforo está desligado
@@ -55,25 +62,28 @@ Principal:
 	CJNE R0,#Um,Principal ;se R0 for um, quer dizer que A incrementou por isso faz-se as verificações; se for 0, não se faz as verificações
 	JNZ ContaSegundos_10 ;comparar A com 0, saltar se não é zero
 	;Pôr S1 e S2 verdes, S3 vermelho e P3 verde
-	CLR S1_Verde 
-	SETB S1_Amarelo
-	SETB S1_Vermelho
-	CLR S2_Verde
-	SETB S2_Amarelo
-	SETB S2_Vermelho
-	SETB S3_Verde
-	SETB S3_Amarelo
-	CLR S3_Vermelho
-	CLR P3_Verde
-	SETB P3_Vermelho
+	;CLR S1_Verde 
+	;SETB S1_Amarelo
+	;SETB S1_Vermelho
+	;CLR S2_Verde
+	;SETB S2_Amarelo
+	;SETB S2_Vermelho
+	;SETB S3_Verde
+	;SETB S3_Amarelo
+	;CLR S3_Vermelho
+	;CLR P3_Verde
+	;SETB P3_Vermelho
+	MOV S1_S2,#S1_S2_Verdes
+	MOV S3_P3,#S3_Vermelho_P3_Verde
 	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
 ContaSegundos_10: ;comparar A com 10, saltar se não é igual a 10
 	CJNE A, #10, ContaSegundos_entre_10e15
 	;Pôr S1 e S2 amarelos
-	CLR S1_Amarelo
-	CLR S2_Amarelo
-	SETB S1_Verde
-	SETB S2_Verde
+	;CLR S1_Amarelo
+	;CLR S2_Amarelo
+	;SETB S1_Verde
+	;SETB S2_Verde
+	MOV S1_S2,#S1_S2_Amarelos
 	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
 ContaSegundos_entre_10e15: ;ver se A é maior ou igual a 10 e menor que 15, saltar se não for
 	CJNE A, #10, Maior_ou_igual ;comparar A com 10
@@ -87,20 +97,23 @@ Menorque:
 ContaSegundos_15:
 	CJNE A, #15, ContaSegundos_25
 	;Pôr S1 e S2 vermelhos, S3 verde e P3 vermelho
-	CLR S3_Verde
-	SETB S3_Vermelho
-	CLR S1_Vermelho
-	SETB S1_Amarelo
-	CLR S2_Vermelho
-	SETB S2_Amarelo
-	SETB P3_Verde
-	CLR P3_Vermelho
+	;CLR S3_Verde
+	;SETB S3_Vermelho
+	;CLR S1_Vermelho
+	;SETB S1_Amarelo
+	;CLR S2_Vermelho
+	;SETB S2_Amarelo
+	;SETB P3_Verde
+	;CLR P3_Vermelho
+	MOV S1_S2,#S1_S2_Vermelhos
+	MOV S3_P3,#S3_Verde_P3_Vermelho
 	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
 ContaSegundos_25:
 	CJNE A, #25, ContaSegundos_30
 	;Pôr S3 amarelo
-	CLR S3_Amarelo
-	SETB S3_Verde
+	;CLR S3_Amarelo
+	;SETB S3_Verde
+	MOV S3_P3,#S3_Amarelo_P3_Vermelho
 	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
 ContaSegundos_30:
 	CJNE A, #30, Principal
@@ -111,8 +124,8 @@ Inicializacoes:
 	CLR A ;fazer reset de A
 	MOV R0, #Zero ;fazer reset de R0
 	MOV R1, #Zero ;fazer reset de R1
-	MOV S1_S2, #Um 
-	MOV S3_P3, #Um
+	MOV S1_S2, #S1_S2_Verdes 
+	MOV S3_P3, #S3_Vermelho_P3_Verde
 	RET
 
 AtivaInterrupcao:

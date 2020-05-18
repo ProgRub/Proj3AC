@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 12:05:07 PAGE     1
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 17:44:04 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -11,166 +11,189 @@ LOC  OBJ            LINE     SOURCE
                        1     ;constantes
   0006                 2     TempoL EQU 0x06
   0006                 3     TempoH EQU 0x06
-                       4     
-  0090                 5     S1_Vermelho EQU P1.0
-  0091                 6     S1_Amarelo EQU P1.1
-  0092                 7     S1_Verde EQU P1.2
+                       4             
+                       5     ;S1_Vermelho EQU P1.0
+                       6     ;S1_Amarelo EQU P1.1
+                       7     ;S1_Verde EQU P1.2
                        8     
-  0093                 9     S2_Vermelho EQU P1.3
-  0094                10     S2_Amarelo EQU P1.4
-  0095                11     S2_Verde EQU P1.5
+                       9     ;S2_Vermelho EQU P1.3
+                      10     ;S2_Amarelo EQU P1.4
+                      11     ;S2_Verde EQU P1.5
                       12             
-  00A2                13     S3_Vermelho EQU P2.2
-  00A1                14     S3_Amarelo EQU P2.1
+                      13     ;S3_Vermelho EQU P2.2
+                      14     ;S3_Amarelo EQU P2.1
   00A0                15     S3_Verde EQU P2.0
                       16     
-  00A4                17     P3_Vermelho EQU P2.4
+                      17     ;P3_Vermelho EQU P2.4
   00A3                18     P3_Verde EQU P2.3
                       19     
   00B2                20     B3 EQU P3.2
                       21     
   0090                22     S1_S2 EQU P1
   00A0                23     S3_P3 EQU P2    
-                      24     
-  0000                25     Zero EQU 0 ;para os semáforos indica que o semáforo está ligado
-  0001                26     Um EQU 1 ;para os semáforos indica que o semáforo está desligado
-  000A                27     Dez EQU 10
-  000F                28     Quinze EQU 15
-  0019                29     VinteECinco EQU 25
-  0028                30     Quarenta EQU 40
-  0064                31     Cem EQU 100
-                      32             
-                      33     ; A - contador de tempo em segundos dos semaforos para os carros
-                      34     ; R0 - variavel auxiliar para só efetuar mudanças ao semáforos quando A mudar
-                      35     ; R1 - numero de contagens de 250 microsegundos para fazer 10 milisegundos (40)
-                      36     ; R2 - numero de contagens de 10 milisegundos para fazer 1 segundo (100)
-                      37     
-----                  38     CSEG AT 0000h
-0000 801E             39             JMP Inicio
-                      40     
-----                  41     CSEG AT 0003h
-0003 01B5             42             JMP InterrupcaoExterior0
-                      43             
-----                  44     CSEG AT 000Bh
-000B 01A9             45             JMP InterrupcaoTempo0
-                      46             
-----                  47     CSEG AT 0020h
-0020                  48     Inicio: 
-0020 758107           49             MOV SP, #7
-0023 1185             50             CALL Inicializacoes
-0025 1191             51             CALL AtivaInterrupcao
-0027 1197             52             CALL AtivaTemporizador
+                      24             
+  001B                25     S1_S2_Verdes EQU 00011011b 
+  0013                26     S3_Vermelho_P3_Verde EQU 00010011b 
+  002D                27     S1_S2_Amarelos EQU 00101101b 
+  0036                28     S1_S2_Vermelhos EQU 00110110b 
+  000E                29     S3_Verde_P3_Vermelho EQU 00001110b
+  000D                30     S3_Amarelo_P3_Vermelho EQU 00001101b
+                      31     
+  0000                32     Zero EQU 0 ;para os semáforos indica que o semáforo está ligado
+  0001                33     Um EQU 1 ;para os semáforos indica que o semáforo está desligado
+  000A                34     Dez EQU 10
+  000F                35     Quinze EQU 15
+  0019                36     VinteECinco EQU 25
+  0028                37     Quarenta EQU 40
+  0064                38     Cem EQU 100
+                      39             
+                      40     ; A - contador de tempo em segundos dos semaforos para os carros
+                      41     ; R0 - variavel auxiliar para só efetuar mudanças ao semáforos quando A mudar
+                      42     ; R1 - numero de contagens de 250 microsegundos para fazer 10 milisegundos (40)
+                      43     ; R2 - numero de contagens de 10 milisegundos para fazer 1 segundo (100)
+                      44     
+----                  45     CSEG AT 0000h
+0000 801E             46             JMP Inicio ;depois de um reset efetuar as inicializações
+                      47     
+----                  48     CSEG AT 0003h
+0003 0195             49             JMP InterrupcaoExterior0
+                      50             
+----                  51     CSEG AT 000Bh
+000B 807C             52             JMP InterrupcaoTempo0
                       53             
-0029                  54     Principal:
-0029 B801FD           55             CJNE R0,#Um,Principal ;se R0 for um, quer dizer que A incrementou por isso faz-se a
+----                  54     CSEG AT 0020h
+0020                  55     Inicio: 
+0020 758107           56             MOV SP, #7
+0023 1165             57             CALL Inicializacoes
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 17:44:04 PAGE     2
+
+0025 1171             58             CALL AtivaInterrupcao
+0027 1177             59             CALL AtivaTemporizador
+                      60             
+0029                  61     Principal:
+0029 B801FD           62             CJNE R0,#Um,Principal ;se R0 for um, quer dizer que A incrementou por isso faz-se a
                              s verificações; se for 0, não se faz as verificações
-002C 7018             56             JNZ ContaSegundos_10 ;comparar A com 0, saltar se não é zero
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 12:05:07 PAGE     2
-
-                      57             ;Pôr
-002E C292             58             CLR S1_Verde 
-0030 D291             59             SETB S1_Amarelo
-0032 D290             60             SETB S1_Vermelho
-0034 C295             61             CLR S2_Verde
-0036 D294             62             SETB S2_Amarelo
-0038 D293             63             SETB S2_Vermelho
-003A D2A0             64             SETB S3_Verde
-003C D2A1             65             SETB S3_Amarelo
-003E C2A2             66             CLR S3_Vermelho
-0040 C2A3             67             CLR P3_Verde
-0042 D2A4             68             SETB P3_Vermelho
-0044 7800             69             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
+002C 7008             63             JNZ ContaSegundos_10 ;comparar A com 0, saltar se não é zero
+                      64             ;Pôr S1 e S2 verdes, S3 vermelho e P3 verde
+                      65             ;CLR S1_Verde 
+                      66             ;SETB S1_Amarelo
+                      67             ;SETB S1_Vermelho
+                      68             ;CLR S2_Verde
+                      69             ;SETB S2_Amarelo
+                      70             ;SETB S2_Vermelho
+                      71             ;SETB S3_Verde
+                      72             ;SETB S3_Amarelo
+                      73             ;CLR S3_Vermelho
+                      74             ;CLR P3_Verde
+                      75             ;SETB P3_Vermelho
+002E 75901B           76             MOV S1_S2,#S1_S2_Verdes
+0031 75A013           77             MOV S3_P3,#S3_Vermelho_P3_Verde
+0034 7800             78             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
                              ntado
-0046                  70     ContaSegundos_10: ;comparar A com 10, saltar se não é igual a 10
-0046 B40A0A           71             CJNE A, #10, ContaSegundos_entre_10e15
-0049 C291             72             CLR S1_Amarelo
-004B C294             73             CLR S2_Amarelo
-004D D292             74             SETB S1_Verde
-004F D295             75             SETB S2_Verde
-0051 7800             76             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
+0036                  79     ContaSegundos_10: ;comparar A com 10, saltar se não é igual a 10
+0036 B40A05           80             CJNE A, #10, ContaSegundos_entre_10e15
+                      81             ;Pôr S1 e S2 amarelos
+                      82             ;CLR S1_Amarelo
+                      83             ;CLR S2_Amarelo
+                      84             ;SETB S1_Verde
+                      85             ;SETB S2_Verde
+0039 75902D           86             MOV S1_S2,#S1_S2_Amarelos
+003C 7800             87             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
                              ntado
-0053                  77     ContaSegundos_entre_10e15: ;ver se A é maior ou igual a 10 e menor que 15, saltar se não 
+003E                  88     ContaSegundos_entre_10e15: ;ver se A é maior ou igual a 10 e menor que 15, saltar se não 
                              for
-0053 B40A00           78             CJNE A, #10, Maior_ou_igual ;comparar A com 10
-0056                  79     Maior_ou_igual:
-0056 4009             80             JC ContaSegundos_15 ;se o carry é 1 então A é menor que 10 e por isso salta-se
-0058 B40F00           81             CJNE A, #15, Menorque  ;comparar A com 15
-005B                  82     Menorque:
-005B 5004             83             JNC ContaSegundos_15 ;se o carry é 0 então A é maior ou igual a 15 e por isso sa
+003E B40A00           89             CJNE A, #10, Maior_ou_igual ;comparar A com 10
+0041                  90     Maior_ou_igual:
+0041 4009             91             JC ContaSegundos_15 ;se o carry é 1 então A é menor que 10 e por isso salta-se
+0043 B40F00           92             CJNE A, #15, Menorque  ;comparar A com 15
+0046                  93     Menorque:
+0046 5004             94             JNC ContaSegundos_15 ;se o carry é 0 então A é maior ou igual a 15 e por isso sa
                              lta-se
-005D B2A3             84             CPL P3_Verde
-005F 7800             85             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
+0048 B2A3             95             CPL P3_Verde ;muda o estado de P3, para pôr P3 intermitente
+004A 7800             96             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
                              ntado        
-0061                  86     ContaSegundos_15:
-0061 B40F12           87             CJNE A, #15, ContaSegundos_25
-0064 C2A0             88             CLR S3_Verde
-0066 D2A2             89             SETB S3_Vermelho
-0068 C290             90             CLR S1_Vermelho
-006A D291             91             SETB S1_Amarelo
-006C C293             92             CLR S2_Vermelho
-006E D294             93             SETB S2_Amarelo
-0070 D2A3             94             SETB P3_Verde
-0072 C2A4             95             CLR P3_Vermelho
-0074 7800             96             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
+004C                  97     ContaSegundos_15:
+004C B40F08           98             CJNE A, #15, ContaSegundos_25
+                      99             ;Pôr S1 e S2 vermelhos, S3 verde e P3 vermelho
+                     100             ;CLR S3_Verde
+                     101             ;SETB S3_Vermelho
+                     102             ;CLR S1_Vermelho
+                     103             ;SETB S1_Amarelo
+                     104             ;CLR S2_Vermelho
+                     105             ;SETB S2_Amarelo
+                     106             ;SETB P3_Verde
+                     107             ;CLR P3_Vermelho
+004F 759036          108             MOV S1_S2,#S1_S2_Vermelhos
+0052 75A00E          109             MOV S3_P3,#S3_Verde_P3_Vermelho
+0055 7800            110             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
                              ntado
-0076                  97     ContaSegundos_25:
-0076 B41906           98             CJNE A, #25, ContaSegundos_30
-0079 C2A1             99             CLR S3_Amarelo
-007B D2A0            100             SETB S3_Verde
-007D 7800            101             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
-                             ntado
-007F                 102     ContaSegundos_30:
-007F B41EA7          103             CJNE A, #30, Principal
-0082 E4              104             CLR A
-0083 80A4            105             JMP Principal
-                     106     
-0085                 107     Inicializacoes: 
-0085 E4              108             CLR A
-0086 7800            109             MOV R0, #Zero
-0088 7900            110             MOV R1, #Zero
-008A 759001          111             MOV S1_S2, #Um
-008D 75A001          112             MOV S3_P3, #Um
-0090 22              113             RET
-                     114     
-0091                 115     AtivaInterrupcao:
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 12:05:07 PAGE     3
+0057                 111     ContaSegundos_25:
+0057 B41905          112             CJNE A, #25, ContaSegundos_30
+                     113             ;Pôr S3 amarelo
+                     114             ;CLR S3_Amarelo
+                     115             ;SETB S3_Verde
+005A 75A00D          116             MOV S3_P3,#S3_Amarelo_P3_Vermelho
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 17:44:04 PAGE     3
 
-0091 75A883          116             MOV IE, #10000011b
-0094 D288            117             SETB IT0
-0096 22              118             RET
-                     119     
-0097                 120     AtivaTemporizador:
-0097 758902          121             MOV TMOD, #00000010b
-009A 758A06          122             MOV TL0, #TempoL
-009D 758C06          123             MOV TH0, #TempoH
-00A0 D28C            124             SETB TR0
-00A2 7801            125             MOV R0,#Um
-00A4 7928            126             MOV R1, #Quarenta
-00A6 7A64            127             MOV R2, #Cem
-00A8 22              128             RET
-                     129     
-00A9                 130     InterrupcaoTempo0:
-00A9 D909            131             DJNZ R1, FimIT0
-00AB 7928            132             MOV R1, #Quarenta
-00AD DA05            133             DJNZ R2, FimIT0
-00AF 04              134             INC A
-00B0 7801            135             MOV R0,#Um
-00B2 7A64            136             MOV R2, #Cem
-                     137             
-00B4                 138     FimIT0:
-00B4 32              139             RETI
-                     140     
-00B5                 141     InterrupcaoExterior0:
-00B5 20A008          142             JB S3_Verde, FimIE0
-00B8 7419            143             MOV A, #VinteECinco
-00BA 7801            144             MOV R0,#Um
-00BC 7928            145             MOV R1, #Quarenta
-00BE 7A64            146             MOV R2, #Cem
-00C0                 147     FimIE0:
-00C0 32              148             RETI
-                     149             
-                     150     end
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 12:05:07 PAGE     4
+005D 7800            117             MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser increme
+                             ntado
+005F                 118     ContaSegundos_30:
+005F B41EC7          119             CJNE A, #30, Principal
+0062 E4              120             CLR A ;fazer A=0 para voltar-se ao início do ciclo
+0063 80C4            121             JMP Principal
+                     122     
+0065                 123     Inicializacoes: 
+0065 E4              124             CLR A ;fazer reset de A
+0066 7800            125             MOV R0, #Zero ;fazer reset de R0
+0068 7900            126             MOV R1, #Zero ;fazer reset de R1
+006A 75901B          127             MOV S1_S2, #S1_S2_Verdes 
+006D 75A013          128             MOV S3_P3, #S3_Vermelho_P3_Verde
+0070 22              129             RET
+                     130     
+0071                 131     AtivaInterrupcao:
+0071 75A883          132             MOV IE, #10000011b ;ativar as interrupções em geral, a do timer0 e a externa 0
+0074 D288            133             SETB IT0 ;definir a interrupção externa para ser ativa no falling edge
+0076 22              134             RET
+                     135     
+0077                 136     AtivaTemporizador:
+0077 758902          137             MOV TMOD, #00000010b ;definir o timer 0 no modo 2 (8 bit - auto reload)
+007A 758A06          138             MOV TL0, #TempoL
+007D 758C06          139             MOV TH0, #TempoH
+0080 7801            140             MOV R0,#Um ;meter R0 a um para definir os semáforos no estado inicial
+0082 7928            141             MOV R1, #Quarenta ;meter em R1 o número de contagens necessárias para perfazer 10
+                              milisegundos (40)
+0084 7A64            142             MOV R2, #Cem ;meter em R2 o número de contagens de 10 milisegundos para perfazer 1
+                              segundo (100)
+0086 D28C            143             SETB TR0 ;iniciar o timer
+0088 22              144             RET
+                     145     
+0089                 146     InterrupcaoTempo0:
+0089 D909            147             DJNZ R1, FimIT0 ;decrementar R1 e verificar se chegou a 0, saltar se não chegou a 0
+008B 7928            148             MOV R1, #Quarenta ;reset de R1
+008D DA05            149             DJNZ R2, FimIT0 ;como passou 10 milisegundos, decrementar R2 e verificar se chegou 
+                             a 0, saltar se não
+008F 04              150             INC A ;se R2 chegou a 0, passou um segundo, incrementar A
+0090 7801            151             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
+                             aumentou
+0092 7A64            152             MOV R2, #Cem ;reset de R2
+                     153             
+0094                 154     FimIT0:
+0094 32              155             RETI
+                     156     
+0095                 157     InterrupcaoExterior0:
+0095 20A008          158             JB S3_Verde, FimIE0 ;verificar se S3_Verde está a 1 (desligado) e saltar se isso o
+                             correr
+0098 7419            159             MOV A, #VinteECinco ;se S3_Verde está a 0 (ligado) metemos em A vinte e cinco para
+                              mudar S3 para amarelo
+009A 7801            160             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
+                             foi alterado
+009C 7928            161             MOV R1, #Quarenta ;reset de R1
+009E 7A64            162             MOV R2, #Cem ;reset de R2
+00A0                 163     FimIE0:
+00A0 32              164             RETI
+                     165             
+                     166     end
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/17/2020 17:44:04 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -178,45 +201,42 @@ SYMBOL TABLE LISTING
 
 N A M E                    T Y P E  V A L U E   ATTRIBUTES
 
-ATIVAINTERRUPCAO. . . . .  C ADDR   0091H   A   
-ATIVATEMPORIZADOR . . . .  C ADDR   0097H   A   
+ATIVAINTERRUPCAO. . . . .  C ADDR   0071H   A   
+ATIVATEMPORIZADOR . . . .  C ADDR   0077H   A   
 B3. . . . . . . . . . . .  B ADDR   00B0H.2 A   
 CEM . . . . . . . . . . .  N NUMB   0064H   A   
-CONTASEGUNDOS_10. . . . .  C ADDR   0046H   A   
-CONTASEGUNDOS_15. . . . .  C ADDR   0061H   A   
-CONTASEGUNDOS_25. . . . .  C ADDR   0076H   A   
-CONTASEGUNDOS_30. . . . .  C ADDR   007FH   A   
-CONTASEGUNDOS_ENTRE_10E15  C ADDR   0053H   A   
+CONTASEGUNDOS_10. . . . .  C ADDR   0036H   A   
+CONTASEGUNDOS_15. . . . .  C ADDR   004CH   A   
+CONTASEGUNDOS_25. . . . .  C ADDR   0057H   A   
+CONTASEGUNDOS_30. . . . .  C ADDR   005FH   A   
+CONTASEGUNDOS_ENTRE_10E15  C ADDR   003EH   A   
 DEZ . . . . . . . . . . .  N NUMB   000AH   A   
-FIMIE0. . . . . . . . . .  C ADDR   00C0H   A   
-FIMIT0. . . . . . . . . .  C ADDR   00B4H   A   
+FIMIE0. . . . . . . . . .  C ADDR   00A0H   A   
+FIMIT0. . . . . . . . . .  C ADDR   0094H   A   
 IE. . . . . . . . . . . .  D ADDR   00A8H   A   
-INICIALIZACOES. . . . . .  C ADDR   0085H   A   
+INICIALIZACOES. . . . . .  C ADDR   0065H   A   
 INICIO. . . . . . . . . .  C ADDR   0020H   A   
-INTERRUPCAOEXTERIOR0. . .  C ADDR   00B5H   A   
-INTERRUPCAOTEMPO0 . . . .  C ADDR   00A9H   A   
+INTERRUPCAOEXTERIOR0. . .  C ADDR   0095H   A   
+INTERRUPCAOTEMPO0 . . . .  C ADDR   0089H   A   
 IT0 . . . . . . . . . . .  B ADDR   0088H.0 A   
-MAIOR_OU_IGUAL. . . . . .  C ADDR   0056H   A   
-MENORQUE. . . . . . . . .  C ADDR   005BH   A   
+MAIOR_OU_IGUAL. . . . . .  C ADDR   0041H   A   
+MENORQUE. . . . . . . . .  C ADDR   0046H   A   
 P1. . . . . . . . . . . .  D ADDR   0090H   A   
 P2. . . . . . . . . . . .  D ADDR   00A0H   A   
 P3. . . . . . . . . . . .  D ADDR   00B0H   A   
 P3_VERDE. . . . . . . . .  B ADDR   00A0H.3 A   
-P3_VERMELHO . . . . . . .  B ADDR   00A0H.4 A   
 PRINCIPAL . . . . . . . .  C ADDR   0029H   A   
 QUARENTA. . . . . . . . .  N NUMB   0028H   A   
 QUINZE. . . . . . . . . .  N NUMB   000FH   A   
-S1_AMARELO. . . . . . . .  B ADDR   0090H.1 A   
 S1_S2 . . . . . . . . . .  D ADDR   0090H   A   
-S1_VERDE. . . . . . . . .  B ADDR   0090H.2 A   
-S1_VERMELHO . . . . . . .  B ADDR   0090H.0 A   
-S2_AMARELO. . . . . . . .  B ADDR   0090H.4 A   
-S2_VERDE. . . . . . . . .  B ADDR   0090H.5 A   
-S2_VERMELHO . . . . . . .  B ADDR   0090H.3 A   
-S3_AMARELO. . . . . . . .  B ADDR   00A0H.1 A   
+S1_S2_AMARELOS. . . . . .  N NUMB   002DH   A   
+S1_S2_VERDES. . . . . . .  N NUMB   001BH   A   
+S1_S2_VERMELHOS . . . . .  N NUMB   0036H   A   
+S3_AMARELO_P3_VERMELHO. .  N NUMB   000DH   A   
 S3_P3 . . . . . . . . . .  D ADDR   00A0H   A   
 S3_VERDE. . . . . . . . .  B ADDR   00A0H.0 A   
-S3_VERMELHO . . . . . . .  B ADDR   00A0H.2 A   
+S3_VERDE_P3_VERMELHO. . .  N NUMB   000EH   A   
+S3_VERMELHO_P3_VERDE. . .  N NUMB   0013H   A   
 SP. . . . . . . . . . . .  D ADDR   0081H   A   
 TEMPOH. . . . . . . . . .  N NUMB   0006H   A   
 TEMPOL. . . . . . . . . .  N NUMB   0006H   A   

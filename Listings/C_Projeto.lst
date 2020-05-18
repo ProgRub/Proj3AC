@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 12:04:59 PAGE 1   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 17:34:29 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE C_PROJETO
@@ -10,19 +10,19 @@ line level    source
 
    1          #include <reg51.h>
    2          
-   3          sbit S1_Vermelho = P1^0; //porta de saída para a luz vermelha do semáforo S1
-   4          sbit S1_Amarelo = P1^1; //porta de saída para a luz amarela do semáforo S1
-   5          sbit S1_Verde = P1^2; //porta de saída para a luz verde do semáforo S1
+   3          //sbit S1_Vermelho = P1^0; //porta de saída para a luz vermelha do semáforo S1
+   4          //sbit S1_Amarelo = P1^1; //porta de saída para a luz amarela do semáforo S1
+   5          //sbit S1_Verde = P1^2; //porta de saída para a luz verde do semáforo S1
    6          
-   7          sbit S2_Vermelho = P1^3; //porta de saída para a luz vermelha do semáforo S2
-   8          sbit S2_Amarelo = P1^4; //porta de saída para a luz amarela do semáforo S2
-   9          sbit S2_Verde = P1^5;//porta de saída para a luz verde do semáforo S2
+   7          //sbit S2_Vermelho = P1^3; //porta de saída para a luz vermelha do semáforo S2
+   8          //sbit S2_Amarelo = P1^4; //porta de saída para a luz amarela do semáforo S2
+   9          //sbit S2_Verde = P1^5;//porta de saída para a luz verde do semáforo S2
   10          
-  11          sbit S3_Vermelho = P2^2; //porta de saída para a luz vermelha do semáforo S3
-  12          sbit S3_Amarelo = P2^1; //porta de saída para a luz amarela do semáforo S3
-  13          sbit S3_Verde = P2^0; //porta de saída para a luz verde do semáforo S3
+  11          //sbit S3_Vermelho = P2^2; //porta de saída para a luz vermelha do semáforo S3
+  12          //sbit S3_Amarelo = P2^1; //porta de saída para a luz amarela do semáforo S3
+  13          //sbit S3_Verde = P2^0; //porta de saída para a luz verde do semáforo S3
   14          
-  15          sbit P3_Vermelho = P2^4; //porta de saída para a luz vermelha do semáforo P3
+  15          //sbit P3_Vermelho = P2^4; //porta de saída para a luz vermelha do semáforo P3
   16          sbit P3_Verde = P2^3; //porta de saída para a luz verde do semáforo P3
   17          
   18          sbit B3= P3^2; //porta de entrada para pressionar o botão B3
@@ -62,98 +62,110 @@ line level    source
   50   2                      auxMudarSemaforos = 1; //como o contaSegundos aumentou, definimos isto a 1 para efetuar as verificaçõe
              -s
   51   2              }else{ //se não chegou, incrementa-se a variável
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 12:04:59 PAGE 2   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 17:34:29 PAGE 2   
 
   52   2                      auxContaSegundos++;
   53   2              }
   54   1      }
   55          
-  56          
-  57          void External0_ISR(void) interrupt 0 {
-  58   1              if (S3_Verde == 0){ //verifica-se se o sinal verde do semáforo S3 está ligado
-  59   2                      contaSegundos = 25; //se estiver define-se o contasegundos a 25 pois é neste momento que se põe o sem�
+  56          int S1_S2_Verdes=0x1B; // 0001 1011 em binário
+  57          int S3_Vermelho_P3_Verde=0x13; // 0001 0011 em binário
+  58          int S1_S2_Amarelos=0x2D; // 0010 1101 em binário
+  59          int S1_S2_Vermelhos=0x36; // 0011 0110 em binário
+  60          int S3_Verde_P3_Vermelho=0x0E; // 0000 1110 em binário
+  61          int S3_Amarelo_P3_Vermelho=0x0D; // 0000 1101 em binário
+  62          
+  63          void External0_ISR(void) interrupt 0 {
+  64   1              if (P2 == S3_Verde_P3_Vermelho){ //verifica-se se o sinal verde do semáforo S3 está ligado
+  65   2                      contaSegundos = 25; //se estiver define-se o contasegundos a 25 pois é neste momento que se põe o sem�
              -�foro 3 a amarelo como pretendido
-  60   2                      auxContaSegundos = 0; //reset da variável que conta os overflows do timer, de modo a passar 5 segundos 
+  66   2                      auxContaSegundos = 0; //reset da variável que conta os overflows do timer, de modo a passar 5 segundos 
              -a partir do botão ser clicado
-  61   2                      auxMudarSemaforos = 1; //como o contaSegundos mudou, definimos isto a 1 para efetuar as verificações
-  62   2              }
-  63   1              
-  64   1      }
-  65          
-  66          
-  67          void main(void){
-  68   1              Inicializar();
-  69   1              for(;;){
-  70   2                      if (auxMudarSemaforos==1){
-  71   3                              if(contaSegundos == 0){ //parte inicial do ciclo, S1 e S2 verdes, S3 vermelho, P3 verde
-  72   4                                      S1_Verde = 0;
-  73   4                                      S1_Amarelo = 1;
-  74   4                                      S1_Vermelho = 1;
-  75   4                                      S2_Verde = 0;
-  76   4                                      S2_Amarelo = 1;
-  77   4                                      S2_Vermelho = 1;
-  78   4                                      S3_Verde = 1;
-  79   4                                      S3_Amarelo = 1;
-  80   4                                      S3_Vermelho = 0;
-  81   4                                      P3_Verde = 0;
-  82   4                                      P3_Vermelho = 1;
-  83   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
-             -entar
-  84   4                              }
-  85   3                              
-  86   3                              if(contaSegundos == 10){ //depois de 10 segundos, S1 e S2 fiam amarelos
-  87   4                                      S1_Amarelo = 0;
-  88   4                                      S2_Amarelo = 0;
-  89   4                                      S1_Verde = 1;
-  90   4                                      S2_Verde = 1;
+  67   2                      auxMudarSemaforos = 1; //como o contaSegundos mudou, definimos isto a 1 para efetuar as verificações
+  68   2              }
+  69   1              
+  70   1      }
+  71          
+  72          
+  73          void main(void){
+  74   1              Inicializar();
+  75   1              for(;;){
+  76   2                      if (auxMudarSemaforos==1){
+  77   3                              if(contaSegundos == 0){ //parte inicial do ciclo, S1 e S2 verdes, S3 vermelho, P3 verde
+  78   4                                      //S1_Verde = 0;
+  79   4                                      //S1_Amarelo = 1;
+  80   4                                      //S1_Vermelho = 1;
+  81   4                                      //S2_Verde = 0;
+  82   4                                      //S2_Amarelo = 1;
+  83   4                                      //S2_Vermelho = 1;
+  84   4                                      //S3_Verde = 1;
+  85   4                                      //S3_Amarelo = 1;
+  86   4                                      //S3_Vermelho = 0;
+  87   4                                      //P3_Verde = 0;
+  88   4                                      //P3_Vermelho = 1;
+  89   4                                      P1 = S1_S2_Verdes;
+  90   4                                      P2 = S3_Vermelho_P3_Verde;
   91   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
              -entar
   92   4                              }
-  93   3                              if(contaSegundos >= 10 &&contaSegundos <15){ //entre os 10 e 15 segundos, o semáforo P3 deve ficar ver
+  93   3                              
+  94   3                              if(contaSegundos == 10){ //depois de 10 segundos, S1 e S2 ficam amarelos
+  95   4                                      //S1_Amarelo = 0;
+  96   4                                      //S2_Amarelo = 0;
+  97   4                                      //S1_Verde = 1;
+  98   4                                      //S2_Verde = 1;
+  99   4                                      P1=S1_S2_Amarelos;
+ 100   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -entar
+ 101   4                              }
+ 102   3                              if(contaSegundos >= 10 &&contaSegundos <15){ //entre os 10 e 15 segundos, o semáforo P3 deve ficar ver
              -de intermitente, a cada segundo
-  94   4                                      P3_Verde = ~P3_Verde;
-  95   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+ 103   4                                      P3_Verde = ~P3_Verde;
+ 104   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
              -entar
-  96   4                              }
-  97   3                              
-  98   3                              if(contaSegundos == 15){ //depois de 15 segundos, S1 e S2 ficam vermelhos, S3 fica verde e P3 fica verm
-             -elho
-  99   4                                      S3_Verde = 0;
- 100   4                                      S3_Vermelho = 1;
- 101   4                                      S1_Vermelho = 0;
- 102   4                                      S1_Amarelo = 1;
- 103   4                                      S2_Vermelho = 0;
- 104   4                                      S2_Amarelo = 1;
- 105   4                                      P3_Verde = 1;
- 106   4                                      P3_Vermelho = 0;
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 12:04:59 PAGE 3   
+ 105   4                              }
+ 106   3                              
+ 107   3                              if(contaSegundos == 15){ //depois de 15 segundos, S1 e S2 ficam vermelhos, S3 fica verde e P3 fica verm
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/17/2020 17:34:29 PAGE 3   
 
- 107   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+             -elho
+ 108   4                                      //S3_Verde = 0;
+ 109   4                                      //S3_Vermelho = 1;
+ 110   4                                      //S1_Vermelho = 0;
+ 111   4                                      //S1_Amarelo = 1;
+ 112   4                                      //S2_Vermelho = 0;
+ 113   4                                      //S2_Amarelo = 1;
+ 114   4                                      //P3_Verde = 1;
+ 115   4                                      //P3_Vermelho = 0;
+ 116   4                                      P1=S1_S2_Vermelhos;
+ 117   4                                      P2=S3_Verde_P3_Vermelho;
+ 118   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
              -entar
- 108   4                              }
- 109   3                              
- 110   3                              if(contaSegundos == 25){ //depois de 25 segundos, S3 fica amarelo
- 111   4                                      S3_Amarelo = 0;
- 112   4                                      S3_Verde = 1;
- 113   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
+ 119   4                              }
+ 120   3                              
+ 121   3                              if(contaSegundos == 25){ //depois de 25 segundos, S3 fica amarelo
+ 122   4                                      //S3_Amarelo = 0;
+ 123   4                                      //S3_Verde = 1;
+ 124   4                                      P2=S3_Amarelo_P3_Vermelho;
+ 125   4                                      auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos increm
              -entar
- 114   4                              }
- 115   3                              
- 116   3                              if(contaSegundos == 30){ //depois dos 30 segundos, faz-se reset da variável para voltarmos ao início 
+ 126   4                              }
+ 127   3                              
+ 128   3                              if(contaSegundos == 30){ //depois dos 30 segundos, faz-se reset da variável para voltarmos ao início 
              -do ciclo e tratar dos semáforos
- 117   4                                      contaSegundos = 0; 
- 118   4                              }
- 119   3                      }
- 120   2              }
- 121   1      }
+ 129   4                                      contaSegundos = 0; 
+ 130   4                              }
+ 131   3                      }
+ 132   2              }
+ 133   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    251    ----
+   CODE SIZE        =    233    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      6    ----
+   DATA SIZE        =     18    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
