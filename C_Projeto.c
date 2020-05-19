@@ -21,6 +21,13 @@ int contaSegundos = 0; //esta variável é igual ao número de segundos que pass
 int auxContaSegundos = 0; //esta variável conta o número de vezes que ocorre overflow no timer (que ocorre quando passam 250 microsegundos
 int auxMudarSemaforos = 1; //variável "booleana" para evitar estar sempre a definir os semáforos
 
+int S1_S2_Verdes=0x1B; // 0001 1011 em binário
+int S3_Vermelho_P3_Verde=0x13; // 0001 0011 em binário
+int S1_S2_Amarelos=0x2D; // 0010 1101 em binário
+int S1_S2_Vermelhos=0x36; // 0011 0110 em binário
+int S3_Verde_P3_Vermelho=0x0E; // 0000 1110 em binário
+int S3_Amarelo_P3_Vermelho=0x0D; // 0000 1101 em binário
+
 //*****************IMPORTANTE************************
 //0 - LED ligado
 //1 - LED desligado
@@ -53,13 +60,6 @@ void Timer0_ISR(void) interrupt 1{
 	}
 }
 
-int S1_S2_Verdes=0x1B; // 0001 1011 em binário
-int S3_Vermelho_P3_Verde=0x13; // 0001 0011 em binário
-int S1_S2_Amarelos=0x2D; // 0010 1101 em binário
-int S1_S2_Vermelhos=0x36; // 0011 0110 em binário
-int S3_Verde_P3_Vermelho=0x0E; // 0000 1110 em binário
-int S3_Amarelo_P3_Vermelho=0x0D; // 0000 1101 em binário
-
 void External0_ISR(void) interrupt 0 {
 	if (P2 == S3_Verde_P3_Vermelho){ //verifica-se se o sinal verde do semáforo S3 está ligado
 		contaSegundos = 25; //se estiver define-se o contasegundos a 25 pois é neste momento que se põe o semáforo 3 a amarelo como pretendido
@@ -75,58 +75,31 @@ void main(void){
 	for(;;){
 		if (auxMudarSemaforos==1){
 			if(contaSegundos == 0){ //parte inicial do ciclo, S1 e S2 verdes, S3 vermelho, P3 verde
-				//S1_Verde = 0;
-				//S1_Amarelo = 1;
-				//S1_Vermelho = 1;
-				//S2_Verde = 0;
-				//S2_Amarelo = 1;
-				//S2_Vermelho = 1;
-				//S3_Verde = 1;
-				//S3_Amarelo = 1;
-				//S3_Vermelho = 0;
-				//P3_Verde = 0;
-				//P3_Vermelho = 1;
 				P1 = S1_S2_Verdes;
 				P2 = S3_Vermelho_P3_Verde;
-				auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos incrementar
 			}
 			
 			if(contaSegundos == 10){ //depois de 10 segundos, S1 e S2 ficam amarelos
-				//S1_Amarelo = 0;
-				//S2_Amarelo = 0;
-				//S1_Verde = 1;
-				//S2_Verde = 1;
 				P1=S1_S2_Amarelos;
-				auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos incrementar
-			}
+				}
 			if(contaSegundos >= 10 &&contaSegundos <15){ //entre os 10 e 15 segundos, o semáforo P3 deve ficar verde intermitente, a cada segundo
 				P3_Verde = ~P3_Verde;
-				auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos incrementar
 			}
 			
 			if(contaSegundos == 15){ //depois de 15 segundos, S1 e S2 ficam vermelhos, S3 fica verde e P3 fica vermelho
-				//S3_Verde = 0;
-				//S3_Vermelho = 1;
-				//S1_Vermelho = 0;
-				//S1_Amarelo = 1;
-				//S2_Vermelho = 0;
-				//S2_Amarelo = 1;
-				//P3_Verde = 1;
-				//P3_Vermelho = 0;
 				P1=S1_S2_Vermelhos;
 				P2=S3_Verde_P3_Vermelho;
-				auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos incrementar
 			}
 			
 			if(contaSegundos == 25){ //depois de 25 segundos, S3 fica amarelo
-				//S3_Amarelo = 0;
-				//S3_Verde = 1;
 				P2=S3_Amarelo_P3_Vermelho;
-				auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos incrementar
 			}
 			
+			auxMudarSemaforos=0; //mudar isto para 0 para não fazer as verificações até o contaSegundos incrementar
+
 			if(contaSegundos == 30){ //depois dos 30 segundos, faz-se reset da variável para voltarmos ao início do ciclo e tratar dos semáforos
 				contaSegundos = 0; 
+				auxMudarSemaforos = 1;
 			}
 		}
 	}

@@ -62,29 +62,14 @@ Principal:
 	CJNE R0,#Um,Principal ;se R0 for um, quer dizer que A incrementou por isso faz-se as verificações; se for 0, não se faz as verificações
 	JNZ ContaSegundos_10 ;comparar A com 0, saltar se não é zero
 	;Pôr S1 e S2 verdes, S3 vermelho e P3 verde
-	;CLR S1_Verde 
-	;SETB S1_Amarelo
-	;SETB S1_Vermelho
-	;CLR S2_Verde
-	;SETB S2_Amarelo
-	;SETB S2_Vermelho
-	;SETB S3_Verde
-	;SETB S3_Amarelo
-	;CLR S3_Vermelho
-	;CLR P3_Verde
-	;SETB P3_Vermelho
 	MOV S1_S2,#S1_S2_Verdes
 	MOV S3_P3,#S3_Vermelho_P3_Verde
-	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
+	JMP ResetR0
 ContaSegundos_10: ;comparar A com 10, saltar se não é igual a 10
 	CJNE A, #10, ContaSegundos_entre_10e15
 	;Pôr S1 e S2 amarelos
-	;CLR S1_Amarelo
-	;CLR S2_Amarelo
-	;SETB S1_Verde
-	;SETB S2_Verde
 	MOV S1_S2,#S1_S2_Amarelos
-	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
+	JMP ResetR0
 ContaSegundos_entre_10e15: ;ver se A é maior ou igual a 10 e menor que 15, saltar se não for
 	CJNE A, #10, Maior_ou_igual ;comparar A com 10
 Maior_ou_igual:
@@ -93,31 +78,23 @@ Maior_ou_igual:
 Menorque:
 	JNC ContaSegundos_15 ;se o carry é 0 então A é maior ou igual a 15 e por isso salta-se
 	CPL P3_Verde ;muda o estado de P3, para pôr P3 intermitente
-	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado	
+	JMP ResetR0	
 ContaSegundos_15:
 	CJNE A, #15, ContaSegundos_25
 	;Pôr S1 e S2 vermelhos, S3 verde e P3 vermelho
-	;CLR S3_Verde
-	;SETB S3_Vermelho
-	;CLR S1_Vermelho
-	;SETB S1_Amarelo
-	;CLR S2_Vermelho
-	;SETB S2_Amarelo
-	;SETB P3_Verde
-	;CLR P3_Vermelho
 	MOV S1_S2,#S1_S2_Vermelhos
 	MOV S3_P3,#S3_Verde_P3_Vermelho
-	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
+	JMP ResetR0
 ContaSegundos_25:
 	CJNE A, #25, ContaSegundos_30
 	;Pôr S3 amarelo
-	;CLR S3_Amarelo
-	;SETB S3_Verde
 	MOV S3_P3,#S3_Amarelo_P3_Vermelho
+ResetR0:
 	MOV R0,#Zero ;reset de R0, para não se efetuar as verificações sem A ser incrementado
 ContaSegundos_30:
 	CJNE A, #30, Principal
 	CLR A ;fazer A=0 para voltar-se ao início do ciclo
+	MOV R0, #Um
 	JMP Principal
 
 Inicializacoes: 
