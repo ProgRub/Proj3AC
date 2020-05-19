@@ -17,8 +17,8 @@ sbit P3_Verde = P2^3; //porta de saída para a luz verde do semáforo P3
 
 sbit B3= P3^2; //porta de entrada para pressionar o botão B3
 
-int contaSegundos = 0; //esta variável é igual ao número de segundos que passou deste o início do ciclo
-int auxContaSegundos = 0; //esta variável conta o número de vezes que ocorre overflow no timer (que ocorre quando passam 250 microsegundos
+int contaSegundos = 0; //esta variável é igual ao número de segundos que passaram desde o início do ciclo
+int auxContaSegundos = 0; //esta variável conta o número de vezes que ocorre overflow no timer (que ocorre quando passam 250 microssegundos)
 int auxMudarSemaforos = 1; //variável "booleana" para evitar estar sempre a definir os semáforos
 
 int S1_S2_Verdes=0x1B; // 0001 1011 em binário
@@ -40,7 +40,7 @@ void Inicializar(void){
 	//Configurar o timer no modo 2 (8 bits autoreload)
 	TMOD &= 0xF0;
 	TMOD |= 0x02;
-	//Configurar o tempo de contagem para 250 microsegundos
+	//Configurar o tempo de contagem para 250 microssegundos
 	TH0 = 0x06;
 	TL0 = 0x06;
 	//Iniciar timer 0 e definir a interrupção para ser acionada na falling edge
@@ -48,7 +48,7 @@ void Inicializar(void){
 	IT0 = 1; 
 }
 void Timer0_ISR(void) interrupt 1{
-		//auxContaSegundos = 1 -> 250 microsegundos
+		//auxContaSegundos = 1 -> 250 microssegundos
 		//auxContaSegundos = 4 -> 1 milisegundo
 		//auxContaSegundos = 4000 -> 1 segundo
 	if(auxContaSegundos == 4000){ //quando esta variável chegar a 4000, significa que fez-se um segundo
