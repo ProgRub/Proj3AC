@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/18/2020 16:14:05 PAGE     1
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
 0020                  55     Inicio: 
 0020 758107           56             MOV SP, #7
 0023 1167             57             CALL Inicializacoes
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/18/2020 16:14:05 PAGE     2
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     2
 
 0025 1173             58             CALL AtivaInterrupcao
 0027 1179             59             CALL AtivaTemporizador
@@ -101,7 +101,7 @@ LOC  OBJ            LINE     SOURCE
 0052 75A00E           86             MOV S3_P3,#S3_Verde_P3_Vermelho
 0055 8006             87             JMP ResetR0
 0057                  88     ContaSegundos_25:
-0057 B41905           89             CJNE A, #25, ContaSegundos_30
+0057 B41903           89             CJNE A, #25, ResetR0
                       90             ;Pôr S3 amarelo
 005A 75A00D           91             MOV S3_P3,#S3_Amarelo_P3_Vermelho
 005D                  92     ResetR0:
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
 0082 7801            117             MOV R0,#Um ;meter R0 a um para definir os semáforos no estado inicial
 0084 7928            118             MOV R1, #Quarenta ;meter em R1 o número de contagens necessárias para perfazer 10
                               milisegundos (40)
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/18/2020 16:14:05 PAGE     3
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     3
 
 0086 7A64            119             MOV R2, #Cem ;meter em R2 o número de contagens de 10 milisegundos para perfazer 1
                               segundo (100)
@@ -148,25 +148,24 @@ LOC  OBJ            LINE     SOURCE
 0091 04              127             INC A ;se R2 chegou a 0, passou um segundo, incrementar A
 0092 7801            128             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
                              aumentou
-0094 7A64            129             MOV R2, #Cem ;reset de R2
-                     130             
-0096                 131     FimIT0:
-0096 32              132             RETI
-                     133     
-0097                 134     InterrupcaoExterior0:
-0097 20A008          135             JB S3_Verde, FimIE0 ;verificar se S3_Verde está a 1 (desligado) e saltar se isso o
+0094 7A64            129             MOV R2, #Cem ;reset de R2       
+0096                 130     FimIT0:
+0096 32              131             RETI
+                     132     
+0097                 133     InterrupcaoExterior0:
+0097 20A008          134             JB S3_Verde, FimIE0 ;verificar se S3_Verde está a 1 (desligado) e saltar se isso o
                              correr
-009A 7419            136             MOV A, #VinteECinco ;se S3_Verde está a 0 (ligado) metemos em A vinte e cinco para
+009A 7419            135             MOV A, #VinteECinco ;se S3_Verde está a 0 (ligado) metemos em A vinte e cinco para
                               mudar S3 para amarelo
-009C 7801            137             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
+009C 7801            136             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
                              foi alterado
-009E 7928            138             MOV R1, #Quarenta ;reset de R1
-00A0 7A64            139             MOV R2, #Cem ;reset de R2
-00A2                 140     FimIE0:
-00A2 32              141             RETI
-                     142             
-                     143     end
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/18/2020 16:14:05 PAGE     4
+009E 7928            137             MOV R1, #Quarenta ;reset de R1
+00A0 7A64            138             MOV R2, #Cem ;reset de R2
+00A2                 139     FimIE0:
+00A2 32              140             RETI
+                     141             
+                     142     end
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------

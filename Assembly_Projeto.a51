@@ -86,7 +86,7 @@ ContaSegundos_15:
 	MOV S3_P3,#S3_Verde_P3_Vermelho
 	JMP ResetR0
 ContaSegundos_25:
-	CJNE A, #25, ContaSegundos_30
+	CJNE A, #25, ResetR0
 	;Pôr S3 amarelo
 	MOV S3_P3,#S3_Amarelo_P3_Vermelho
 ResetR0:
@@ -126,8 +126,7 @@ InterrupcaoTempo0:
 	DJNZ R2, FimIT0 ;como passou 10 milisegundos, decrementar R2 e verificar se chegou a 0, saltar se não
 	INC A ;se R2 chegou a 0, passou um segundo, incrementar A
 	MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A aumentou
-	MOV R2, #Cem ;reset de R2
-	
+	MOV R2, #Cem ;reset de R2	
 FimIT0:
 	RETI
 
