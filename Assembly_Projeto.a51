@@ -99,8 +99,9 @@ ContaSegundos_30:
 
 Inicializacoes: 
 	CLR A ;fazer reset de A
-	MOV R0, #Zero ;fazer reset de R0
-	MOV R1, #Zero ;fazer reset de R1
+	MOV R0,#Um ;meter R0 a um para definir os semáforos no estado inicial
+	MOV R1, #Quarenta ;meter em R1 o número de contagens necessárias para perfazer 10 milisegundos (40)
+	MOV R2, #Cem ;meter em R2 o número de contagens de 10 milisegundos para perfazer 1 segundo (100)
 	MOV S1_S2, #S1_S2_Verdes 
 	MOV S3_P3, #S3_Vermelho_P3_Verde
 	RET
@@ -114,9 +115,6 @@ AtivaTemporizador:
 	MOV TMOD, #00000010b ;definir o timer 0 no modo 2 (8 bit - auto reload)
 	MOV TL0, #TempoL
 	MOV TH0, #TempoH
-	MOV R0,#Um ;meter R0 a um para definir os semáforos no estado inicial
-	MOV R1, #Quarenta ;meter em R1 o número de contagens necessárias para perfazer 10 milisegundos (40)
-	MOV R2, #Cem ;meter em R2 o número de contagens de 10 milisegundos para perfazer 1 segundo (100)
 	SETB TR0 ;iniciar o timer
 	RET
 

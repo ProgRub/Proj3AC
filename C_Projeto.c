@@ -19,7 +19,7 @@ sbit B3= P3^2; //porta de entrada para pressionar o botão B3
 
 int contaSegundos = 0; //esta variável é igual ao número de segundos que passaram desde o início do ciclo
 int auxContaSegundos = 0; //esta variável conta o número de vezes que ocorre overflow no timer (que ocorre quando passam 250 microssegundos)
-int auxMudarSemaforos = 1; //variável "booleana" para evitar estar sempre a definir os semáforos
+bit auxMudarSemaforos = 1; //variável "booleana" para evitar estar sempre a definir os semáforos
 
 int S1_S2_Verdes=0x1B; // 0001 1011 em binário
 int S3_Vermelho_P3_Verde=0x13; // 0001 0011 em binário

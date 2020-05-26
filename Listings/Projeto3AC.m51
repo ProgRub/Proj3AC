@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/24/2020  10:58:08  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/26/2020  16:21:42  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -25,7 +25,7 @@ LINK MAP OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
                     0005H     0006H                  *** GAP ***
             CODE    000BH     0002H     ABSOLUTE     
                     000DH     0013H                  *** GAP ***
-            CODE    0020H     0083H     ABSOLUTE     
+            CODE    0020H     007FH     ABSOLUTE     
 
 
 
@@ -35,8 +35,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
   ----------------------------------
 
   -------         MODULE        ASSEMBLY_PROJETO
-  C:0073H         SYMBOL        ATIVAINTERRUPCAO
-  C:0079H         SYMBOL        ATIVATEMPORIZADOR
+  C:0075H         SYMBOL        ATIVAINTERRUPCAO
+  C:007BH         SYMBOL        ATIVATEMPORIZADOR
   B:00B0H.2       SYMBOL        B3
   N:0064H         SYMBOL        CEM
   C:0036H         SYMBOL        CONTASEGUNDOS_10
@@ -45,13 +45,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
   C:005FH         SYMBOL        CONTASEGUNDOS_30
   C:003EH         SYMBOL        CONTASEGUNDOS_ENTRE_10E15
   N:000AH         SYMBOL        DEZ
-  C:00A2H         SYMBOL        FIMIE0
-  C:0096H         SYMBOL        FIMIT0
+  C:009EH         SYMBOL        FIMIE0
+  C:0092H         SYMBOL        FIMIT0
   D:00A8H         SYMBOL        IE
   C:0067H         SYMBOL        INICIALIZACOES
   C:0020H         SYMBOL        INICIO
-  C:0097H         SYMBOL        INTERRUPCAOEXTERIOR0
-  C:008BH         SYMBOL        INTERRUPCAOTEMPO0
+  C:0093H         SYMBOL        INTERRUPCAOEXTERIOR0
+  C:0087H         SYMBOL        INTERRUPCAOTEMPO0
   B:0088H.0       SYMBOL        IT0
   C:0041H         SYMBOL        MAIOR_OU_IGUAL
   C:0046H         SYMBOL        MENORQUE
@@ -59,7 +59,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
   D:00A0H         SYMBOL        P2
   D:00B0H         SYMBOL        P3
   B:00A0H.3       SYMBOL        P3_VERDE
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2020  10:58:08  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/26/2020  16:21:42  PAGE 2
 
 
   C:0029H         SYMBOL        PRINCIPAL
@@ -119,42 +119,40 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
   C:0065H         LINE#         98
   C:0067H         LINE#         101
   C:0068H         LINE#         102
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2020  10:58:08  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/26/2020  16:21:42  PAGE 3
 
 
   C:006AH         LINE#         103
   C:006CH         LINE#         104
-  C:006FH         LINE#         105
-  C:0072H         LINE#         106
-  C:0073H         LINE#         109
-  C:0076H         LINE#         110
+  C:006EH         LINE#         105
+  C:0071H         LINE#         106
+  C:0074H         LINE#         107
+  C:0075H         LINE#         110
   C:0078H         LINE#         111
-  C:0079H         LINE#         114
-  C:007CH         LINE#         115
-  C:007FH         LINE#         116
-  C:0082H         LINE#         117
+  C:007AH         LINE#         112
+  C:007BH         LINE#         115
+  C:007EH         LINE#         116
+  C:0081H         LINE#         117
   C:0084H         LINE#         118
   C:0086H         LINE#         119
-  C:0088H         LINE#         120
-  C:008AH         LINE#         121
+  C:0087H         LINE#         122
+  C:0089H         LINE#         123
   C:008BH         LINE#         124
   C:008DH         LINE#         125
-  C:008FH         LINE#         126
-  C:0091H         LINE#         127
-  C:0092H         LINE#         128
-  C:0094H         LINE#         129
-  C:0096H         LINE#         131
-  C:0097H         LINE#         134
+  C:008EH         LINE#         126
+  C:0090H         LINE#         127
+  C:0092H         LINE#         129
+  C:0093H         LINE#         132
+  C:0096H         LINE#         133
+  C:0098H         LINE#         134
   C:009AH         LINE#         135
   C:009CH         LINE#         136
-  C:009EH         LINE#         137
-  C:00A0H         LINE#         138
-  C:00A2H         LINE#         140
+  C:009EH         LINE#         138
   -------         ENDMOD        ASSEMBLY_PROJETO
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0089H BYTE ( 6%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0085H BYTE ( 6%) *
 ******************************************************************************
 
-Program Size: data=8.0 xdata=0 code=137
+Program Size: data=8.0 xdata=0 code=133
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

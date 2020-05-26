@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     1
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -56,19 +56,19 @@ LOC  OBJ            LINE     SOURCE
 0000 801E             46             JMP Inicio ;depois de um reset efetuar as inicializações
                       47     
 ----                  48     CSEG AT 0003h
-0003 0197             49             JMP InterrupcaoExterior0
+0003 0193             49             JMP InterrupcaoExterior0
                       50             
 ----                  51     CSEG AT 000Bh
-000B 807E             52             JMP InterrupcaoTempo0
+000B 807A             52             JMP InterrupcaoTempo0
                       53             
 ----                  54     CSEG AT 0020h
 0020                  55     Inicio: 
 0020 758107           56             MOV SP, #7
 0023 1167             57             CALL Inicializacoes
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     2
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     2
 
-0025 1173             58             CALL AtivaInterrupcao
-0027 1179             59             CALL AtivaTemporizador
+0025 1175             58             CALL AtivaInterrupcao
+0027 117B             59             CALL AtivaTemporizador
                       60             
 0029                  61     Principal:
 0029 B801FD           62             CJNE R0,#Um,Principal ;se R0 for um, quer dizer que A incrementou por isso faz-se a
@@ -115,57 +115,55 @@ LOC  OBJ            LINE     SOURCE
                       99     
 0067                 100     Inicializacoes: 
 0067 E4              101             CLR A ;fazer reset de A
-0068 7800            102             MOV R0, #Zero ;fazer reset de R0
-006A 7900            103             MOV R1, #Zero ;fazer reset de R1
-006C 75901B          104             MOV S1_S2, #S1_S2_Verdes 
-006F 75A013          105             MOV S3_P3, #S3_Vermelho_P3_Verde
-0072 22              106             RET
-                     107     
-0073                 108     AtivaInterrupcao:
-0073 75A883          109             MOV IE, #10000011b ;ativar as interrupções em geral, a do timer0 e a externa 0
-0076 D288            110             SETB IT0 ;definir a interrupção externa para ser ativa no falling edge
-0078 22              111             RET
-                     112     
-0079                 113     AtivaTemporizador:
-0079 758902          114             MOV TMOD, #00000010b ;definir o timer 0 no modo 2 (8 bit - auto reload)
-007C 758A06          115             MOV TL0, #TempoL
-007F 758C06          116             MOV TH0, #TempoH
-0082 7801            117             MOV R0,#Um ;meter R0 a um para definir os semáforos no estado inicial
-0084 7928            118             MOV R1, #Quarenta ;meter em R1 o número de contagens necessárias para perfazer 10
+0068 7801            102             MOV R0,#Um ;meter R0 a um para definir os semáforos no estado inicial
+006A 7928            103             MOV R1, #Quarenta ;meter em R1 o número de contagens necessárias para perfazer 10
                               milisegundos (40)
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     3
-
-0086 7A64            119             MOV R2, #Cem ;meter em R2 o número de contagens de 10 milisegundos para perfazer 1
+006C 7A64            104             MOV R2, #Cem ;meter em R2 o número de contagens de 10 milisegundos para perfazer 1
                               segundo (100)
-0088 D28C            120             SETB TR0 ;iniciar o timer
-008A 22              121             RET
-                     122     
-008B                 123     InterrupcaoTempo0:
-008B D909            124             DJNZ R1, FimIT0 ;decrementar R1 e verificar se chegou a 0, saltar se não chegou a 0
-008D 7928            125             MOV R1, #Quarenta ;reset de R1
-008F DA05            126             DJNZ R2, FimIT0 ;como passou 10 milisegundos, decrementar R2 e verificar se chegou 
+006E 75901B          105             MOV S1_S2, #S1_S2_Verdes 
+0071 75A013          106             MOV S3_P3, #S3_Vermelho_P3_Verde
+0074 22              107             RET
+                     108     
+0075                 109     AtivaInterrupcao:
+0075 75A883          110             MOV IE, #10000011b ;ativar as interrupções em geral, a do timer0 e a externa 0
+0078 D288            111             SETB IT0 ;definir a interrupção externa para ser ativa no falling edge
+007A 22              112             RET
+                     113     
+007B                 114     AtivaTemporizador:
+007B 758902          115             MOV TMOD, #00000010b ;definir o timer 0 no modo 2 (8 bit - auto reload)
+007E 758A06          116             MOV TL0, #TempoL
+0081 758C06          117             MOV TH0, #TempoH
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     3
+
+0084 D28C            118             SETB TR0 ;iniciar o timer
+0086 22              119             RET
+                     120     
+0087                 121     InterrupcaoTempo0:
+0087 D909            122             DJNZ R1, FimIT0 ;decrementar R1 e verificar se chegou a 0, saltar se não chegou a 0
+0089 7928            123             MOV R1, #Quarenta ;reset de R1
+008B DA05            124             DJNZ R2, FimIT0 ;como passou 10 milisegundos, decrementar R2 e verificar se chegou 
                              a 0, saltar se não
-0091 04              127             INC A ;se R2 chegou a 0, passou um segundo, incrementar A
-0092 7801            128             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
+008D 04              125             INC A ;se R2 chegou a 0, passou um segundo, incrementar A
+008E 7801            126             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
                              aumentou
-0094 7A64            129             MOV R2, #Cem ;reset de R2       
-0096                 130     FimIT0:
-0096 32              131             RETI
-                     132     
-0097                 133     InterrupcaoExterior0:
-0097 20A008          134             JB S3_Verde, FimIE0 ;verificar se S3_Verde está a 1 (desligado) e saltar se isso o
+0090 7A64            127             MOV R2, #Cem ;reset de R2       
+0092                 128     FimIT0:
+0092 32              129             RETI
+                     130     
+0093                 131     InterrupcaoExterior0:
+0093 20A008          132             JB S3_Verde, FimIE0 ;verificar se S3_Verde está a 1 (desligado) e saltar se isso o
                              correr
-009A 7419            135             MOV A, #VinteECinco ;se S3_Verde está a 0 (ligado) metemos em A vinte e cinco para
+0096 7419            133             MOV A, #VinteECinco ;se S3_Verde está a 0 (ligado) metemos em A vinte e cinco para
                               mudar S3 para amarelo
-009C 7801            136             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
+0098 7801            134             MOV R0,#Um ;meter R0 a um, para efetuar as verificações de A em Principal pois A 
                              foi alterado
-009E 7928            137             MOV R1, #Quarenta ;reset de R1
-00A0 7A64            138             MOV R2, #Cem ;reset de R2
-00A2                 139     FimIE0:
-00A2 32              140             RETI
-                     141             
-                     142     end
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/24/2020 10:58:08 PAGE     4
+009A 7928            135             MOV R1, #Quarenta ;reset de R1
+009C 7A64            136             MOV R2, #Cem ;reset de R2
+009E                 137     FimIE0:
+009E 32              138             RETI
+                     139             
+                     140     end
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -173,8 +171,8 @@ SYMBOL TABLE LISTING
 
 N A M E                    T Y P E  V A L U E   ATTRIBUTES
 
-ATIVAINTERRUPCAO. . . . .  C ADDR   0073H   A   
-ATIVATEMPORIZADOR . . . .  C ADDR   0079H   A   
+ATIVAINTERRUPCAO. . . . .  C ADDR   0075H   A   
+ATIVATEMPORIZADOR . . . .  C ADDR   007BH   A   
 B3. . . . . . . . . . . .  B ADDR   00B0H.2 A   
 CEM . . . . . . . . . . .  N NUMB   0064H   A   
 CONTASEGUNDOS_10. . . . .  C ADDR   0036H   A   
@@ -183,13 +181,13 @@ CONTASEGUNDOS_25. . . . .  C ADDR   0057H   A
 CONTASEGUNDOS_30. . . . .  C ADDR   005FH   A   
 CONTASEGUNDOS_ENTRE_10E15  C ADDR   003EH   A   
 DEZ . . . . . . . . . . .  N NUMB   000AH   A   
-FIMIE0. . . . . . . . . .  C ADDR   00A2H   A   
-FIMIT0. . . . . . . . . .  C ADDR   0096H   A   
+FIMIE0. . . . . . . . . .  C ADDR   009EH   A   
+FIMIT0. . . . . . . . . .  C ADDR   0092H   A   
 IE. . . . . . . . . . . .  D ADDR   00A8H   A   
 INICIALIZACOES. . . . . .  C ADDR   0067H   A   
 INICIO. . . . . . . . . .  C ADDR   0020H   A   
-INTERRUPCAOEXTERIOR0. . .  C ADDR   0097H   A   
-INTERRUPCAOTEMPO0 . . . .  C ADDR   008BH   A   
+INTERRUPCAOEXTERIOR0. . .  C ADDR   0093H   A   
+INTERRUPCAOTEMPO0 . . . .  C ADDR   0087H   A   
 IT0 . . . . . . . . . . .  B ADDR   0088H.0 A   
 MAIOR_OU_IGUAL. . . . . .  C ADDR   0041H   A   
 MENORQUE. . . . . . . . .  C ADDR   0046H   A   
