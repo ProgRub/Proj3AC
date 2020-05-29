@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     1
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/29/2020 14:44:11 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
 0020                  55     Inicio: 
 0020 758107           56             MOV SP, #7
 0023 1167             57             CALL Inicializacoes
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     2
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/29/2020 14:44:11 PAGE     2
 
 0025 1175             58             CALL AtivaInterrupcao
 0027 117B             59             CALL AtivaTemporizador
@@ -85,8 +85,8 @@ LOC  OBJ            LINE     SOURCE
 003C 801F             72             JMP ResetR0
 003E                  73     ContaSegundos_entre_10e15: ;ver se A é maior ou igual a 10 e menor que 15, saltar se não 
                              for
-003E B40A00           74             CJNE A, #10, Maior_ou_igual ;comparar A com 10
-0041                  75     Maior_ou_igual:
+003E B40A00           74             CJNE A, #10, Maior ;comparar A com 10
+0041                  75     Maior:
 0041 4009             76             JC ContaSegundos_15 ;se o carry é 1 então A é menor que 10 e por isso salta-se
 0043 B40F00           77             CJNE A, #15, Menorque  ;comparar A com 15
 0046                  78     Menorque:
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
 007B 758902          115             MOV TMOD, #00000010b ;definir o timer 0 no modo 2 (8 bit - auto reload)
 007E 758A06          116             MOV TL0, #TempoL
 0081 758C06          117             MOV TH0, #TempoH
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     3
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/29/2020 14:44:11 PAGE     3
 
 0084 D28C            118             SETB TR0 ;iniciar o timer
 0086 22              119             RET
@@ -163,7 +163,7 @@ LOC  OBJ            LINE     SOURCE
 009E 32              138             RETI
                      139             
                      140     end
-A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/26/2020 16:21:42 PAGE     4
+A51 MACRO ASSEMBLER  ASSEMBLY_PROJETO                                                     05/29/2020 14:44:11 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -189,7 +189,7 @@ INICIO. . . . . . . . . .  C ADDR   0020H   A
 INTERRUPCAOEXTERIOR0. . .  C ADDR   0093H   A   
 INTERRUPCAOTEMPO0 . . . .  C ADDR   0087H   A   
 IT0 . . . . . . . . . . .  B ADDR   0088H.0 A   
-MAIOR_OU_IGUAL. . . . . .  C ADDR   0041H   A   
+MAIOR . . . . . . . . . .  C ADDR   0041H   A   
 MENORQUE. . . . . . . . .  C ADDR   0046H   A   
 P1. . . . . . . . . . . .  D ADDR   0090H   A   
 P2. . . . . . . . . . . .  D ADDR   00A0H   A   

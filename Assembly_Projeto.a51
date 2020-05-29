@@ -70,9 +70,9 @@ ContaSegundos_10: ;comparar A com 10, saltar se não é igual a 10
 	;Pôr S1 e S2 amarelos
 	MOV S1_S2,#S1_S2_Amarelos
 	JMP ResetR0
-ContaSegundos_entre_10e15: ;ver se A é maior ou igual a 10 e menor que 15, saltar se não for
-	CJNE A, #10, Maior_ou_igual ;comparar A com 10
-Maior_ou_igual:
+ContaSegundos_entre_10e15: ;ver se A é maior a 10 e menor que 15, saltar se não for
+	CJNE A, #10, Maior ;comparar A com 10
+Maior:
 	JC ContaSegundos_15 ;se o carry é 1 então A é menor que 10 e por isso salta-se
 	CJNE A, #15, Menorque  ;comparar A com 15
 Menorque:

@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/26/2020  16:21:42  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/29/2020  14:44:11  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -53,13 +53,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
   C:0093H         SYMBOL        INTERRUPCAOEXTERIOR0
   C:0087H         SYMBOL        INTERRUPCAOTEMPO0
   B:0088H.0       SYMBOL        IT0
-  C:0041H         SYMBOL        MAIOR_OU_IGUAL
+  C:0041H         SYMBOL        MAIOR
   C:0046H         SYMBOL        MENORQUE
   D:0090H         SYMBOL        P1
   D:00A0H         SYMBOL        P2
   D:00B0H         SYMBOL        P3
   B:00A0H.3       SYMBOL        P3_VERDE
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/26/2020  16:21:42  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2020  14:44:11  PAGE 2
 
 
   C:0029H         SYMBOL        PRINCIPAL
@@ -119,7 +119,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\Projeto3AC (ASSEMBLY_PROJETO)
   C:0065H         LINE#         98
   C:0067H         LINE#         101
   C:0068H         LINE#         102
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/26/2020  16:21:42  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2020  14:44:11  PAGE 3
 
 
   C:006AH         LINE#         103

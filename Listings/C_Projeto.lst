@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/26/2020 16:04:46 PAGE 1   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/29/2020 14:37:46 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE C_PROJETO
@@ -10,19 +10,19 @@ line level    source
 
    1          #include <reg51.h>
    2          
-   3          sbit S1_Vermelho = P1^0; //porta de saída para a luz vermelha do semáforo S1
-   4          sbit S1_Amarelo = P1^1; //porta de saída para a luz amarela do semáforo S1
-   5          sbit S1_Verde = P1^2; //porta de saída para a luz verde do semáforo S1
+   3          //sbit S1_Vermelho = P1^0; //porta de saída para a luz vermelha do semáforo S1
+   4          //sbit S1_Amarelo = P1^1; //porta de saída para a luz amarela do semáforo S1
+   5          //sbit S1_Verde = P1^2; //porta de saída para a luz verde do semáforo S1
    6          
-   7          sbit S2_Vermelho = P1^3; //porta de saída para a luz vermelha do semáforo S2
-   8          sbit S2_Amarelo = P1^4; //porta de saída para a luz amarela do semáforo S2
-   9          sbit S2_Verde = P1^5;//porta de saída para a luz verde do semáforo S2
+   7          //sbit S2_Vermelho = P1^3; //porta de saída para a luz vermelha do semáforo S2
+   8          //sbit S2_Amarelo = P1^4; //porta de saída para a luz amarela do semáforo S2
+   9          //sbit S2_Verde = P1^5;//porta de saída para a luz verde do semáforo S2
   10          
-  11          sbit S3_Vermelho = P2^2; //porta de saída para a luz vermelha do semáforo S3
-  12          sbit S3_Amarelo = P2^1; //porta de saída para a luz amarela do semáforo S3
-  13          sbit S3_Verde = P2^0; //porta de saída para a luz verde do semáforo S3
+  11          //sbit S3_Vermelho = P2^2; //porta de saída para a luz vermelha do semáforo S3
+  12          //sbit S3_Amarelo = P2^1; //porta de saída para a luz amarela do semáforo S3
+  13          //sbit S3_Verde = P2^0; //porta de saída para a luz verde do semáforo S3
   14          
-  15          sbit P3_Vermelho = P2^4; //porta de saída para a luz vermelha do semáforo P3
+  15          //sbit P3_Vermelho = P2^4; //porta de saída para a luz vermelha do semáforo P3
   16          sbit P3_Verde = P2^3; //porta de saída para a luz verde do semáforo P3
   17          
   18          sbit B3= P3^2; //porta de entrada para pressionar o botão B3
@@ -62,7 +62,7 @@ line level    source
   50          void Timer0_ISR(void) interrupt 1{
   51   1                      //auxContaSegundos = 1 -> 250 microssegundos
   52   1                      //auxContaSegundos = 4 -> 1 milisegundo
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/26/2020 16:04:46 PAGE 2   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/29/2020 14:37:46 PAGE 2   
 
   53   1                      //auxContaSegundos = 4000 -> 1 segundo
   54   1              if(auxContaSegundos == 4000){ //quando esta variável chegar a 4000, significa que fez-se um segundo
@@ -99,8 +99,8 @@ line level    source
   82   3                              if(contaSegundos == 10){ //depois de 10 segundos, S1 e S2 ficam amarelos
   83   4                                      P1=S1_S2_Amarelos;
   84   4                                      }
-  85   3                              if(contaSegundos >= 10 &&contaSegundos <15){ //entre os 10 e 15 segundos, o semáforo P3 deve ficar ver
-             -de intermitente, a cada segundo
+  85   3                              if(contaSegundos > 10 &&contaSegundos <15){ //entre os 10 e 15 segundos, o semáforo P3 deve ficar verd
+             -e intermitente, a cada segundo
   86   4                                      P3_Verde = ~P3_Verde;
   87   4                              }
   88   3                              
@@ -126,7 +126,7 @@ line level    source
  105   2              }
  106   1      }
 
-C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/26/2020 16:04:46 PAGE 3   
+C51 COMPILER V9.60.0.0   C_PROJETO                                                         05/29/2020 14:37:46 PAGE 3   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
